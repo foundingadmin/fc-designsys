@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Founding Creative — Design System</title>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* ── Print-optimised overrides ─────────────────────────── */
+  @page {
+    size: A3 portrait;
+    margin: 0;
+  }
+  @media print {
+    html, body {
+      background: #000 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    /* Print every painted color faithfully */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    /* Drop the sticky nav from page-1 — appears once at top, then never again */
+    .ds-nav {
+      position: static !important;
+      backdrop-filter: none !important;
+    }
+    /* No animations / hovers */
+    .holo-bg__grad { animation: none !important; }
+    a, button { pointer-events: none; }
+
+    /* Each big section starts on a fresh page */
+    .ds-section, .hero {
+      break-before: page;
+      page-break-before: always;
+      break-inside: avoid-page;
+    }
+    .hero { break-before: auto; page-break-before: auto; }
+
+    /* Avoid awkward splits inside cards / demos */
+    .swatch, .radius-demo, .shadow-demo,
+    .logo-cell, .site-card, .card,
+    .demo-row, .scale-row, .gelica-row,
+    .holo-stage,
+    .grid-2 > *, .grid-3 > *, .grid-4 > *, .grid-6 > * {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    /* Tame oversized hero a touch so the H1 doesn't get clipped */
+    .hero { min-height: auto !important; padding: 80px 56px 56px !important; }
+    .hero__title { font-size: 92px !important; }
+    .ds-section { padding: 72px 56px !important; }
+    .ds-section__title { font-size: 64px !important; }
+    .ds-foot { break-before: auto !important; page-break-before: auto !important; }
+  }
+
+  /* Page shell */
+  body { background: var(--n-black); }
+  .ds-nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; gap: 24px; align-items: center;
+    padding: 16px 32px;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--white-10);
+  }
+  .ds-nav__logo { height: 28px; }
+  .ds-nav__links { display: flex; gap: 20px; font-size: 14px; color: var(--text-dim); margin-left: auto; }
+  .ds-nav__links a { padding: 6px 0; position: relative; }
+  .ds-nav__links a:hover { color: var(--mint); }
+
+  .ds-section { padding: 120px 64px; border-bottom: 1px solid var(--white-10); position: relative; }
+  .ds-section__label { color: var(--mint); font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 16px; }
+  .ds-section__title { font-family: var(--font-display); font-weight: 500; font-size: 84px; line-height: 1; letter-spacing: -0.01em; margin: 0 0 24px; }
+  .ds-section__intro { font-size: 20px; line-height: 1.5; color: var(--text-dim); max-width: 720px; margin: 0 0 64px; }
+  .ds-inner { max-width: 1312px; margin: 0 auto; }
+
+  /* Hero */
+  .hero {
+    position: relative; min-height: 720px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 120px 64px 64px;
+    overflow: hidden;
+  }
+  .hero__title {
+    position: relative; z-index: 2;
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(56px, 8vw, 140px); line-height: 0.95;
+    letter-spacing: -0.015em; max-width: 1100px;
+    text-wrap: balance;
+  }
+  .hero__title em { font-style: italic; color: var(--mint); }
+  .hero__sub {
+    position: relative; z-index: 2;
+    margin-top: 32px; font-size: 22px; line-height: 1.5;
+    color: var(--text-dim); max-width: 640px;
+  }
+  .hero__meta {
+    position: relative; z-index: 2;
+    display: flex; gap: 32px; margin-top: 48px;
+    font-size: 14px; color: var(--text-dim);
+    padding-top: 24px; border-top: 1px solid var(--white-20);
+  }
+  .hero__meta strong { color: var(--white); font-weight: 600; display: block; margin-bottom: 4px; letter-spacing: 0.06em; text-transform: uppercase; font-size: 12px; }
+
+  /* Grids */
+  .grid-12 { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+
+  /* Color swatches */
+  .swatch {
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    border: 1px solid var(--white-10);
+  }
+  .swatch__chip { aspect-ratio: 16 / 10; }
+  .swatch__meta {
+    padding: 16px; background: var(--n-ink);
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .swatch__name { font-size: 15px; font-weight: 600; }
+  .swatch__hex  { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 12px; color: var(--text-dim); letter-spacing: 0.02em; }
+
+  /* Scale row */
+  .scale-row {
+    display: grid; grid-template-columns: 120px 1fr 200px;
+    gap: 32px; align-items: baseline;
+    padding: 32px 0; border-top: 1px solid var(--white-10);
+  }
+  .scale-row__label { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px; color: var(--text-dim); }
+  .scale-row__meta  { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px; color: var(--text-dim); text-align: right; }
+  .scale-row__sample { overflow: hidden; }
+
+  /* Radius demo */
+  .radius-demo {
+    aspect-ratio: 1;
+    background: var(--n-ink);
+    border: 1px solid var(--white-10);
+    display: flex; align-items: flex-end;
+    padding: 16px;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 13px; color: var(--text-dim);
+  }
+
+  /* Shadow demo */
+  .shadow-demo {
+    aspect-ratio: 4 / 3;
+    background: var(--n-ink);
+    border-radius: var(--r-lg);
+    display: flex; align-items: flex-end;
+    padding: 20px;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 12px; color: var(--text-dim);
+  }
+
+  /* Logo display */
+  .logo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .logo-cell {
+    aspect-ratio: 3 / 2;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: var(--r-lg);
+    border: 1px solid var(--white-10);
+    position: relative; overflow: hidden;
+  }
+  .logo-cell--dark { background: var(--n-black); }
+  .logo-cell--ink  { background: var(--n-ink); }
+  .logo-cell--mint { background: var(--mint); }
+  .logo-cell--holo {
+    background:
+      linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),
+      conic-gradient(from 40deg, var(--holo-cyan), var(--holo-mint), var(--white), var(--holo-lavender), var(--holo-cyan));
+  }
+  .logo-cell__label {
+    position: absolute; top: 12px; left: 12px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .logo-cell--mint .logo-cell__label { color: rgba(0,0,0,0.6); }
+  .logo-cell img { width: 50%; max-width: 200px; }
+
+  /* Holo tile */
+  .holo-stage {
+    position: relative;
+    border-radius: var(--r-2xl);
+    overflow: hidden;
+    aspect-ratio: 16 / 7;
+    background: var(--n-black);
+  }
+  .holo-stage > .holo-bg { position: absolute; }
+  .holo-stage__content {
+    position: relative; z-index: 2;
+    height: 100%;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 40px; text-align: center;
+  }
+  .holo-stage__eyebrow { color: var(--mint); font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 16px; }
+  .holo-stage__title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(40px, 5vw, 88px); line-height: 1;
+    letter-spacing: -0.01em; max-width: 900px;
+    text-shadow: 0 0 24px rgba(255,255,255,0.3);
+  }
+
+  /* Component demos */
+  .demo-row {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    padding: 32px;
+    background: var(--n-ink);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--white-10);
+  }
+  .demo-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 16px;
+  }
+
+  .site-card {
+    border-radius: var(--r-lg);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    min-height: 400px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    border: 1px solid;
+  }
+  .site-card--prism  { background: var(--deep-navy); border-color: var(--holo-cyan); }
+  .site-card--rocket { background: var(--deep-teal); border-color: var(--holo-cyan-pale); }
+  .site-card--orbit  { background: var(--deep-plum); border-color: var(--holo-lavender); }
+  .site-card__glow {
+    position: absolute; width: 380px; height: 380px; border-radius: 50%;
+    filter: blur(40px); opacity: 0.45;
+    top: -80px; right: -80px;
+  }
+  .site-card--prism .site-card__glow  { background: radial-gradient(circle, var(--holo-cyan), transparent 60%); }
+  .site-card--rocket .site-card__glow { background: radial-gradient(circle, var(--holo-mint), transparent 60%); }
+  .site-card--orbit .site-card__glow  { background: radial-gradient(circle, var(--holo-lavender), transparent 60%); }
+  .site-card h4 { position: relative; font-size: 24px; margin-bottom: 8px; }
+  .site-card p  { position: relative; font-size: 14px; color: var(--text-dim); }
+  .site-card .arrow-link { position: relative; color: var(--white); font-size: 18px; }
+
+  /* Wave mark bg */
+  .wave-accent {
+    position: absolute; pointer-events: none;
+    opacity: 0.08;
+  }
+
+  /* Type specimens */
+  .specimen-big {
+    font-family: var(--font-display);
+    font-size: clamp(100px, 16vw, 280px);
+    line-height: 0.85; letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+  .specimen-big em { font-style: italic; font-weight: 400; color: var(--mint); }
+
+  /* Footer note */
+  .ds-foot {
+    padding: 80px 64px; text-align: center;
+    color: var(--text-dim); font-size: 14px;
+  }
+
+  /* Gelica weight matrix */
+  .gelica-row {
+    display: grid; grid-template-columns: 180px 1fr 1fr; gap: 24px;
+    padding: 20px 32px;
+    border-top: 1px solid var(--white-10);
+    align-items: baseline;
+  }
+  .gelica-row:first-child { border-top: 0; }
+  .gelica-row--hero { background: rgba(126,248,147,0.04); }
+  .gelica-row__label {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 12px; color: var(--text-dim);
+    letter-spacing: 0.02em;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ Top nav ══════════ -->
+<nav class="ds-nav">
+  <img class="ds-nav__logo" src="assets/logos/wordmark-white.svg" alt="Founding Creative">
+  <span class="chip chip--mint chip--dot" style="font-size:11px;">v1.0 · Design System</span>
+  <div class="ds-nav__links">
+    <a href="#brand">Brand</a>
+    <a href="#color">Color</a>
+    <a href="#type">Type</a>
+    <a href="#spacing">Spacing</a>
+    <a href="#components">Components</a>
+    <a href="#patterns">Patterns</a>
+  </div>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero" id="top">
+  <div class="holo-bg">
+    <div class="holo-bg__grad"></div>
+    <div class="holo-bg__waves"></div>
+    <div class="holo-bg__veil"></div>
+    <div class="holo-bg__fade"></div>
+  </div>
+
+  <h1 class="hero__title">Creative <em>foundations</em> for brands of all sizes.</h1>
+  <p class="hero__sub">A living system for web, brand, and design at Founding Creative — Gelica + Manrope, the mint-and-holographic palette, and the components that ship on foundingcreative.com.</p>
+  <div class="hero__meta">
+    <div><strong>Version</strong>1.0 · April 2026</div>
+    <div><strong>Source</strong>Figma · foundingcreative.com</div>
+    <div><strong>Stewards</strong>Tyler, Jamie, Sasha</div>
+    <div><strong>License</strong>Internal · Founding Creative</div>
+  </div>
+</section>
+
+<!-- ══════════ BRAND ══════════ -->
+<section class="ds-section" id="brand">
+  <div class="ds-inner">
+    <div class="ds-section__label">01 — Brand</div>
+    <h2 class="ds-section__title">The marks.</h2>
+    <p class="ds-section__intro">Four expressions of one identity. The <strong>wordmark</strong> leads in navigation and signatures. The <strong>brandmark</strong> pairs icon + wordmark for hero lockups. The <strong>icon</strong> goes anywhere square: favicons, avatars, app tiles. The <strong>wave</strong> is a textural signature — use it large, behind, and cropped.</p>
+
+    <div class="logo-grid" style="margin-bottom: 32px;">
+      <div class="logo-cell logo-cell--dark">
+        <span class="logo-cell__label">Wordmark · White</span>
+        <img src="assets/logos/wordmark-white.svg" alt="">
+      </div>
+      <div class="logo-cell logo-cell--mint">
+        <span class="logo-cell__label">Wordmark · Black</span>
+        <img src="assets/logos/wordmark-black.svg" alt="">
+      </div>
+      <div class="logo-cell logo-cell--ink">
+        <span class="logo-cell__label">Brandmark · White</span>
+        <img src="assets/logos/brandmark-white.svg" alt="" style="width: 30%;">
+      </div>
+      <div class="logo-cell logo-cell--holo">
+        <span class="logo-cell__label">Brandmark · Black</span>
+        <img src="assets/logos/brandmark-black.svg" alt="" style="width: 30%;">
+      </div>
+      <div class="logo-cell logo-cell--dark">
+        <span class="logo-cell__label">Icon · White</span>
+        <img src="assets/logos/icon-white.svg" alt="" style="width: 40%;">
+      </div>
+      <div class="logo-cell logo-cell--mint">
+        <span class="logo-cell__label">Icon · Black</span>
+        <img src="assets/logos/icon-black.svg" alt="" style="width: 40%;">
+      </div>
+      <div class="logo-cell logo-cell--ink" style="grid-column: span 2;">
+        <span class="logo-cell__label">Wave · Textural signature</span>
+        <img src="assets/logos/wave-white.svg" alt="" style="width: 90%; max-width: none;">
+      </div>
+    </div>
+
+    <!-- Holographic signature -->
+    <h3 style="margin-top: 80px; margin-bottom: 24px;">Holographic signature</h3>
+    <p class="ds-section__intro" style="margin-bottom: 32px;">The animated conic gradient + wave overlay + black veil is Founding's most distinctive visual. Deploy it on marquee hero sections and rarely elsewhere — scarcity is the point.</p>
+    <div class="holo-stage">
+      <div class="holo-bg">
+        <div class="holo-bg__grad"></div>
+        <div class="holo-bg__waves"></div>
+        <div class="holo-bg__veil"></div>
+        <div class="holo-bg__fade"></div>
+      </div>
+      <div class="holo-stage__content">
+        <div class="holo-stage__eyebrow">Brand signature · Holo</div>
+        <div class="holo-stage__title">We make things <em style="font-style:italic; color: var(--mint);">worth founding.</em></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 80px; margin-bottom: 24px;">Clear space &amp; minimum size</h3>
+    <div class="grid-3">
+      <div style="padding: 32px; background: var(--n-ink); border-radius: var(--r-lg); border: 1px solid var(--white-10);">
+        <div class="demo-label">Clear space</div>
+        <p class="muted" style="font-size: 14px; line-height: 1.5;">Reserve clear space equal to the height of the icon's "F" bar on all sides. Never crowd the wordmark with copy or UI chrome.</p>
+      </div>
+      <div style="padding: 32px; background: var(--n-ink); border-radius: var(--r-lg); border: 1px solid var(--white-10);">
+        <div class="demo-label">Minimum size</div>
+        <p class="muted" style="font-size: 14px; line-height: 1.5;">Wordmark: 80px wide on screen, 20mm in print. Icon: 24px on screen, 8mm in print. Below that, use the favicon variant.</p>
+      </div>
+      <div style="padding: 32px; background: var(--n-ink); border-radius: var(--r-lg); border: 1px solid var(--white-10);">
+        <div class="demo-label">Don't</div>
+        <p class="muted" style="font-size: 14px; line-height: 1.5;">No outlines, drop shadows, rotations, or rebuilds. Don't place the black wordmark on busy holographic backgrounds — use the white one instead.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ COLOR ══════════ -->
+<section class="ds-section" id="color">
+  <div class="ds-inner">
+    <div class="ds-section__label">02 — Color</div>
+    <h2 class="ds-section__title">Deep black. Mint&nbsp;green.<br>One prismatic spectrum.</h2>
+    <p class="ds-section__intro">The system lives on a black-first canvas. <strong>Mint Green #7EF893</strong> is the single accent — it's what "points at things." The holographic spectrum (cyan, mint, lavender) only appears on hero backgrounds and inside SiteLaunch cards, never as general UI color.</p>
+
+    <h3 style="margin-bottom: 24px;">Neutrals</h3>
+    <div class="grid-4" style="margin-bottom: 64px;">
+      <div class="swatch"><div class="swatch__chip" style="background:#F2F2F2"></div><div class="swatch__meta"><span class="swatch__name">Neutral Lightest</span><span class="swatch__hex">#F2F2F2</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#D8D8D8"></div><div class="swatch__meta"><span class="swatch__name">Neutral Lighter</span><span class="swatch__hex">#D8D8D8</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#B2B2B2"></div><div class="swatch__meta"><span class="swatch__name">Neutral Light</span><span class="swatch__hex">#B2B2B2</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#7F7F7F"></div><div class="swatch__meta"><span class="swatch__name">Neutral</span><span class="swatch__hex">#7F7F7F</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#4C4C4C"></div><div class="swatch__meta"><span class="swatch__name">Neutral Dark</span><span class="swatch__hex">#4C4C4C</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#252424"></div><div class="swatch__meta"><span class="swatch__name">Neutral Darker</span><span class="swatch__hex">#252424</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#1C1C1E"></div><div class="swatch__meta"><span class="swatch__name">Ink (surface)</span><span class="swatch__hex">#1C1C1E</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#000000;border-right:1px solid var(--white-10)"></div><div class="swatch__meta"><span class="swatch__name">Black</span><span class="swatch__hex">#000000</span></div></div>
+    </div>
+
+    <h3 style="margin-bottom: 24px;">Mint Green — primary accent</h3>
+    <div class="grid-6" style="margin-bottom: 64px;">
+      <div class="swatch"><div class="swatch__chip" style="background:#E5FDE9"></div><div class="swatch__meta"><span class="swatch__name">Lighter</span><span class="swatch__hex">#E5FDE9</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#A4FAB3"></div><div class="swatch__meta"><span class="swatch__name">Light</span><span class="swatch__hex">#A4FAB3</span></div></div>
+      <div class="swatch" style="box-shadow: var(--glow-mint);"><div class="swatch__chip" style="background:#7EF893"></div><div class="swatch__meta"><span class="swatch__name">Mint ✦</span><span class="swatch__hex">#7EF893</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#64C675"></div><div class="swatch__meta"><span class="swatch__name">Dark</span><span class="swatch__hex">#64C675</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#32633A"></div><div class="swatch__meta"><span class="swatch__name">Darker</span><span class="swatch__hex">#32633A</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#254A2C"></div><div class="swatch__meta"><span class="swatch__name">Darkest</span><span class="swatch__hex">#254A2C</span></div></div>
+    </div>
+
+    <h3 style="margin-bottom: 24px;">Holographic spectrum — hero only</h3>
+    <div class="grid-6" style="margin-bottom: 64px;">
+      <div class="swatch"><div class="swatch__chip" style="background:#69EEFF"></div><div class="swatch__meta"><span class="swatch__name">Holo Cyan</span><span class="swatch__hex">#69EEFF</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#8EF2FF"></div><div class="swatch__meta"><span class="swatch__name">Cyan Lt</span><span class="swatch__hex">#8EF2FF</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#6EFFB6"></div><div class="swatch__meta"><span class="swatch__name">Holo Mint</span><span class="swatch__hex">#6EFFB6</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#BFFFDF"></div><div class="swatch__meta"><span class="swatch__name">Mint Pale</span><span class="swatch__hex">#BFFFDF</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#C6A2FF"></div><div class="swatch__meta"><span class="swatch__name">Lavender</span><span class="swatch__hex">#C6A2FF</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#DEC9FF"></div><div class="swatch__meta"><span class="swatch__name">Lavender Lt</span><span class="swatch__hex">#DEC9FF</span></div></div>
+    </div>
+
+    <h3 style="margin-bottom: 24px;">Deep anchors — SiteLaunch cards</h3>
+    <div class="grid-3" style="margin-bottom: 64px;">
+      <div class="swatch"><div class="swatch__chip" style="background:#001441"></div><div class="swatch__meta"><span class="swatch__name">Deep Navy · Prism</span><span class="swatch__hex">#001441</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#003329"></div><div class="swatch__meta"><span class="swatch__name">Deep Teal · Rocket</span><span class="swatch__hex">#003329</span></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#230035"></div><div class="swatch__meta"><span class="swatch__name">Deep Plum · Orbit</span><span class="swatch__hex">#230035</span></div></div>
+    </div>
+
+    <!-- Schemes -->
+    <h3 style="margin-bottom: 24px;">Schemes in use</h3>
+    <div class="grid-2">
+      <div style="border-radius: var(--r-xl); overflow: hidden; border: 1px solid var(--white-10); background: var(--n-black); padding: 32px;">
+        <div class="demo-label" style="color: var(--mint); margin-bottom: 24px;">Scheme 1 — Dark (default)</div>
+        <div style="padding: 24px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg); display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <span style="width: 10px; height: 10px; border-radius: 50%; background: var(--mint);"></span>
+          <span style="color: var(--mint);">Accent callouts use mint</span>
+        </div>
+        <div style="padding: 24px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg); color: var(--white);">Foreground surface on black background, mint accent, 10% white borders.</div>
+      </div>
+      <div style="border-radius: var(--r-xl); overflow: hidden; border: 1px solid var(--ink-15); background: var(--mint); padding: 32px;">
+        <div class="demo-label" style="color: var(--ink-80); margin-bottom: 24px;">Scheme 2 — Mint (CTA / press)</div>
+        <div style="padding: 24px; background: var(--mint-dark); border: 1px solid var(--ink-15); border-radius: var(--r-lg); display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <span style="width: 10px; height: 10px; border-radius: 50%; background: #000;"></span>
+          <span style="color: #000;">Accent callouts use black</span>
+        </div>
+        <div style="padding: 24px; background: var(--mint-dark); border: 1px solid var(--ink-15); border-radius: var(--r-lg); color: #000;">Darker mint foreground on mint background, 15% ink borders, black accent.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TYPE ══════════ -->
+<section class="ds-section" id="type">
+  <div class="ds-inner">
+    <div class="ds-section__label">03 — Type</div>
+    <h2 class="ds-section__title">Gelica &amp; Manrope.</h2>
+    <p class="ds-section__intro">A contemporary serif paired with a geometric grotesque. Gelica carries voice, pull-quotes, and display. Manrope carries everything readable — UI, body, captions.</p>
+
+    <!-- Specimen -->
+    <div style="padding: 48px; border: 1px solid var(--white-10); border-radius: var(--r-2xl); background: var(--n-ink); margin-bottom: 48px;">
+      <div class="demo-label" style="color: var(--mint);">Display · Gelica Medium 500 · italic for emphasis</div>
+      <div class="specimen-big">Aa<em>Bb</em>Cc</div>
+      <div style="display:flex; justify-content:space-between; margin-top:24px; color: var(--text-dim); font-size: 14px; font-family: ui-monospace, monospace;">
+        <span>ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 !?&amp;</span>
+        <span>OTF · 9 weights</span>
+      </div>
+    </div>
+
+    <div style="padding: 48px; border: 1px solid var(--white-10); border-radius: var(--r-2xl); background: var(--n-ink); margin-bottom: 64px;">
+      <div class="demo-label" style="color: var(--mint);">Body · Manrope Variable 200–800</div>
+      <div style="font-family: var(--font-body); font-size: clamp(60px, 8vw, 140px); line-height: 1; font-weight: 500;">Aa<span style="font-weight: 800;">Bb</span><span style="font-weight: 300;">Cc</span></div>
+      <div style="display:flex; justify-content:space-between; margin-top:24px; color: var(--text-dim); font-size: 14px; font-family: ui-monospace, monospace;">
+        <span>ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 !?&amp;</span>
+        <span>TTF Variable · wght axis</span>
+      </div>
+    </div>
+
+    <!-- Scale -->
+    <h3 style="margin-bottom: 16px;">Scale · Desktop</h3>
+    <div>
+      <div class="scale-row"><div class="scale-row__label">H1 / Display</div><div class="scale-row__sample"><span style="font-family: var(--font-display); font-weight: 500; font-size: 84px; line-height: 1; letter-spacing: -0.01em;">Creative foundations</span></div><div class="scale-row__meta">84 / 100% · Gelica Medium</div></div>
+      <div class="scale-row"><div class="scale-row__label">H2</div><div class="scale-row__sample"><span style="font-family: var(--font-display); font-weight: 500; font-size: 60px; line-height: 1.2;">Built to fit your process</span></div><div class="scale-row__meta">60 / 120% · Gelica Medium</div></div>
+      <div class="scale-row"><div class="scale-row__label">H3</div><div class="scale-row__sample"><span style="font-family: var(--font-display); font-weight: 500; font-size: 48px; line-height: 1.2;">Your custom website starts here</span></div><div class="scale-row__meta">48 / 120% · Gelica Medium</div></div>
+      <div class="scale-row"><div class="scale-row__label">H4</div><div class="scale-row__sample"><span style="font-family: var(--font-display); font-weight: 500; font-size: 40px; line-height: 1.3;">Prism SiteLaunch</span></div><div class="scale-row__meta">40 / 130% · Gelica Medium</div></div>
+      <div class="scale-row"><div class="scale-row__label">H5</div><div class="scale-row__sample"><span style="font-family: var(--font-display); font-weight: 500; font-size: 32px; line-height: 1.3;">Relationships first</span></div><div class="scale-row__meta">32 / 130% · Gelica Medium</div></div>
+      <div class="scale-row"><div class="scale-row__label">H6</div><div class="scale-row__sample"><span style="font-family: var(--font-display); font-weight: 500; font-size: 26px; line-height: 1.4;">Founding energy in every sprint</span></div><div class="scale-row__meta">26 / 140% · Gelica Medium</div></div>
+      <div class="scale-row"><div class="scale-row__label">Text Lg</div><div class="scale-row__sample"><span style="font-family: var(--font-body); font-size: 20px; line-height: 1.5;">We work with people, not logos. Projects start with a shared bar for craft.</span></div><div class="scale-row__meta">20 / 150% · Manrope 400</div></div>
+      <div class="scale-row"><div class="scale-row__label">Text Base</div><div class="scale-row__sample"><span style="font-family: var(--font-body); font-size: 18px; line-height: 1.5;">Body copy lives here. Manrope's tall x-height keeps longer paragraphs legible on dark backgrounds — the default reading size across the site.</span></div><div class="scale-row__meta">18 / 150% · Manrope 400</div></div>
+      <div class="scale-row"><div class="scale-row__label">Text Sm</div><div class="scale-row__sample"><span style="font-family: var(--font-body); font-size: 16px; line-height: 1.5;">UI labels, navigation, card supporting text, captions.</span></div><div class="scale-row__meta">16 / 150% · Manrope 400</div></div>
+      <div class="scale-row"><div class="scale-row__label">Text Xs</div><div class="scale-row__sample"><span style="font-family: var(--font-body); font-size: 12px; line-height: 1.5; color: var(--text-dim);">Legal, meta, disclaimers, very small labels.</span></div><div class="scale-row__meta">12 / 150% · Manrope 400</div></div>
+    </div>
+
+    <!-- Weights -->
+    <h3 style="margin: 80px 0 24px;">Weights · when to reach</h3>
+    <div class="grid-3">
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label">Gelica 500 · Medium</div>
+        <div style="font-family: var(--font-display); font-weight: 500; font-size: 32px; line-height: 1.2; margin: 12px 0;">The default display weight</div>
+        <p class="muted" style="font-size: 14px;">Headlines, hero titles, section titles, big numbers.</p>
+      </div>
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label">Gelica 500 · Italic</div>
+        <div style="font-family: var(--font-display); font-weight: 500; font-size: 32px; line-height: 1.2; margin: 12px 0; font-style: italic; color: var(--mint);">Emphasis only</div>
+        <p class="muted" style="font-size: 14px;">A single phrase per headline, usually mint-tinted, for the voicey beat.</p>
+      </div>
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label">Manrope 700 · Bold</div>
+        <div style="font-family: var(--font-body); font-weight: 700; font-size: 32px; line-height: 1.2; margin: 12px 0;">Taglines &amp; stats</div>
+        <p class="muted" style="font-size: 14px;">Short all-bold labels under icons; large stat numbers; button labels at scale.</p>
+      </div>
+    </div>
+
+    <!-- Full Gelica weight matrix (complete family now available) -->
+    <h3 style="margin: 80px 0 24px;">Gelica — full family</h3>
+    <p class="ds-section__intro" style="margin-bottom: 32px;">All 10 upright weights and their italic counterparts. Reach outside the default (Medium 500) rarely and intentionally — Gelica Black is for press only; Gelica ExtraLight for airy editorial layouts.</p>
+    <div style="border: 1px solid var(--white-10); border-radius: var(--r-xl); background: var(--n-ink); overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 180px 1fr 1fr; gap: 24px; padding: 20px 32px; border-bottom: 1px solid var(--white-10); font-family: ui-monospace, monospace; font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em;">
+        <span>Weight</span><span>Upright</span><span>Italic</span>
+      </div>
+      <div class="gelica-matrix">
+        <div class="gelica-row"><span class="gelica-row__label">200 · ExtraLight</span><span style="font-family:var(--font-display);font-weight:200;font-size:36px;">Founding Creative</span><span style="font-family:var(--font-display);font-weight:200;font-size:36px;font-style:italic;">Founding Creative</span></div>
+        <div class="gelica-row"><span class="gelica-row__label">300 · Light</span><span style="font-family:var(--font-display);font-weight:300;font-size:36px;">Founding Creative</span><span style="font-family:var(--font-display);font-weight:300;font-size:36px;font-style:italic;">Founding Creative</span></div>
+        <div class="gelica-row"><span class="gelica-row__label">400 · Regular</span><span style="font-family:var(--font-display);font-weight:400;font-size:36px;">Founding Creative</span><span style="font-family:var(--font-display);font-weight:400;font-size:36px;font-style:italic;">Founding Creative</span></div>
+        <div class="gelica-row gelica-row--hero"><span class="gelica-row__label">500 · Medium <span style="color: var(--mint);">✦</span></span><span style="font-family:var(--font-display);font-weight:500;font-size:36px;">Founding Creative</span><span style="font-family:var(--font-display);font-weight:500;font-size:36px;font-style:italic; color: var(--mint);">Founding Creative</span></div>
+        <div class="gelica-row"><span class="gelica-row__label">600 · SemiBold</span><span style="font-family:var(--font-display);font-weight:600;font-size:36px;">Founding Creative</span><span style="font-family:var(--font-display);font-weight:600;font-size:36px;font-style:italic;">Founding Creative</span></div>
+        <div class="gelica-row"><span class="gelica-row__label">700 · Bold</span><span style="font-family:var(--font-display);font-weight:700;font-size:36px;">Founding Creative</span><span style="font-family:var(--font-display);font-weight:700;font-size:36px;font-style:italic;">Founding Creative</span></div>
+        <div class="gelica-row"><span class="gelica-row__label">900 · Black</span><span style="font-family:var(--font-display);font-weight:900;font-size:36px;">Founding Creative</span><span style="font-family:var(--font-display);font-weight:900;font-size:36px;font-style:italic;">Founding Creative</span></div>
+      </div>
+    </div>
+
+    <!-- Manrope variable axis -->
+    <h3 style="margin: 80px 0 24px;">Manrope — variable axis</h3>
+    <p class="ds-section__intro" style="margin-bottom: 32px;">One variable font file covers the full 200–800 weight range. Body copy sits at 400; UI labels and links at 600; section labels and stats at 700.</p>
+    <div style="border: 1px solid var(--white-10); border-radius: var(--r-xl); background: var(--n-ink); padding: 40px;">
+      <div style="display: grid; gap: 20px;">
+        <div style="display: grid; grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline;"><span class="gelica-row__label">200 · ExtraLight</span><span style="font-family:var(--font-body);font-weight:200;font-size:32px;">Creative foundations for brands of all sizes.</span></div>
+        <div style="display: grid; grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline;"><span class="gelica-row__label">300 · Light</span><span style="font-family:var(--font-body);font-weight:300;font-size:32px;">Creative foundations for brands of all sizes.</span></div>
+        <div style="display: grid; grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline;"><span class="gelica-row__label">400 · Regular <span style="color: var(--mint);">✦</span></span><span style="font-family:var(--font-body);font-weight:400;font-size:32px;">Creative foundations for brands of all sizes.</span></div>
+        <div style="display: grid; grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline;"><span class="gelica-row__label">500 · Medium</span><span style="font-family:var(--font-body);font-weight:500;font-size:32px;">Creative foundations for brands of all sizes.</span></div>
+        <div style="display: grid; grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline;"><span class="gelica-row__label">600 · SemiBold <span style="color: var(--mint);">✦</span></span><span style="font-family:var(--font-body);font-weight:600;font-size:32px;">Creative foundations for brands of all sizes.</span></div>
+        <div style="display: grid; grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline;"><span class="gelica-row__label">700 · Bold <span style="color: var(--mint);">✦</span></span><span style="font-family:var(--font-body);font-weight:700;font-size:32px;">Creative foundations for brands of all sizes.</span></div>
+        <div style="display: grid; grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline;"><span class="gelica-row__label">800 · ExtraBold</span><span style="font-family:var(--font-body);font-weight:800;font-size:32px;">Creative foundations for brands of all sizes.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SPACING ══════════ -->
+<section class="ds-section" id="spacing">
+  <div class="ds-inner">
+    <div class="ds-section__label">04 — Spacing, Radius, Shadow</div>
+    <h2 class="ds-section__title">Measured, calm, generous.</h2>
+    <p class="ds-section__intro">An 8pt grid with a 12-column 1140px container inside a 150px gutter. Three radius tiers. Shadows are subtle on dark (real luminance is mostly from the holo gradient, not drop-shadows).</p>
+
+    <h3 style="margin-bottom: 24px;">Radius</h3>
+    <div class="grid-6" style="margin-bottom: 64px;">
+      <div class="radius-demo" style="border-radius: var(--r-xs);">r-xs · 6</div>
+      <div class="radius-demo" style="border-radius: var(--r-sm);">r-sm · 8</div>
+      <div class="radius-demo" style="border-radius: var(--r-md);">r-md · 12</div>
+      <div class="radius-demo" style="border-radius: var(--r-lg);">r-lg · 16</div>
+      <div class="radius-demo" style="border-radius: var(--r-xl);">r-xl · 24</div>
+      <div class="radius-demo" style="border-radius: var(--r-2xl);">r-2xl · 32</div>
+    </div>
+
+    <h3 style="margin-bottom: 24px;">Shadows</h3>
+    <div class="grid-6" style="margin-bottom: 64px;">
+      <div class="shadow-demo" style="box-shadow: var(--shadow-xs);">xs</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-sm);">sm</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-md);">md</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-lg);">lg</div>
+      <div class="shadow-demo" style="box-shadow: var(--shadow-xl);">xl</div>
+      <div class="shadow-demo" style="box-shadow: var(--glow-mint);">glow-mint</div>
+    </div>
+
+    <h3 style="margin-bottom: 24px;">Spacing scale (8pt)</h3>
+    <div style="border: 1px solid var(--white-10); border-radius: var(--r-lg); background: var(--n-ink); padding: 32px;">
+      <div style="display: grid; grid-template-columns: 100px 1fr 100px; gap: 16px; align-items: center; font-family: ui-monospace, monospace; font-size: 13px;">
+        <div>s-1 · 4</div><div style="height:4px; background: var(--mint); border-radius: 2px;"></div><div class="muted">inline gaps</div>
+        <div>s-2 · 8</div><div style="height:8px; background: var(--mint); border-radius: 2px;"></div><div class="muted">tag gaps</div>
+        <div>s-3 · 12</div><div style="height:12px; background: var(--mint); border-radius: 2px;"></div><div class="muted">compact</div>
+        <div>s-4 · 16</div><div style="height:16px; background: var(--mint); border-radius: 2px;"></div><div class="muted">card grid gaps</div>
+        <div>s-5 · 24</div><div style="height:24px; background: var(--mint); border-radius: 2px;"></div><div class="muted">content gaps</div>
+        <div>s-6 · 32</div><div style="height:32px; background: var(--mint); border-radius: 2px;"></div><div class="muted">card padding</div>
+        <div>s-8 · 48</div><div style="height:48px; background: var(--mint); border-radius: 2px;"></div><div class="muted">section padding (tight)</div>
+        <div>s-10 · 80</div><div style="height:80px; background: var(--mint); border-radius: 2px;"></div><div class="muted">section vertical</div>
+        <div>s-13 · 150</div><div style="height:150px; background: linear-gradient(90deg, var(--mint), var(--holo-cyan)); border-radius: 2px;"></div><div class="muted">page gutter</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ COMPONENTS ══════════ -->
+<section class="ds-section" id="components">
+  <div class="ds-inner">
+    <div class="ds-section__label">05 — Components</div>
+    <h2 class="ds-section__title">The working set.</h2>
+    <p class="ds-section__intro">What ships on foundingcreative.com today. These are the living versions — pair with the React library in <code>/Components</code>.</p>
+
+    <!-- Buttons -->
+    <h3 style="margin-bottom: 16px;">Buttons</h3>
+    <div class="demo-row" style="margin-bottom: 48px;">
+      <button class="btn btn--primary">See our work <span class="arrow">→</span></button>
+      <button class="btn btn--secondary">Our services <span class="arrow">→</span></button>
+      <button class="btn btn--link">Find the right fit <span class="arrow">→</span></button>
+      <button class="btn btn--primary btn--small">Small CTA</button>
+      <button class="btn btn--secondary btn--small">Learn more</button>
+    </div>
+
+    <!-- Navbar -->
+    <h3 style="margin-bottom: 16px;">Navbar</h3>
+    <div style="border: 1px solid var(--white-10); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 48px;">
+      <nav class="navbar" style="background: var(--n-ink);">
+        <div class="navbar__logo"><img src="assets/logos/wordmark-white.svg" alt="" style="height: 28px;"></div>
+        <div class="navbar__nav">
+          <a class="navbar__link" href="#">Work</a>
+          <a class="navbar__link" href="#">Services</a>
+          <a class="navbar__link" href="#">How we work</a>
+          <a class="navbar__link" href="#">About</a>
+          <a class="navbar__link" href="#">Field notes</a>
+        </div>
+        <div class="navbar__actions">
+          <button class="btn btn--secondary btn--small">Let's talk</button>
+          <button class="btn btn--primary btn--small">Get a quote →</button>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Chips -->
+    <h3 style="margin-bottom: 16px;">Tags &amp; chips</h3>
+    <div class="demo-row" style="margin-bottom: 48px;">
+      <span class="chip">Brand</span>
+      <span class="chip">Websites</span>
+      <span class="chip chip--mint">Featured</span>
+      <span class="chip chip--dot">Active engagement</span>
+      <span class="chip">Design systems</span>
+      <span class="chip">Motion</span>
+    </div>
+
+    <!-- Case study cards -->
+    <h3 style="margin-bottom: 16px;">Case study card</h3>
+    <div class="grid-3" style="margin-bottom: 48px;">
+      <article class="card card--case">
+        <div class="card__image" style="background: linear-gradient(135deg, #69EEFF, #C6A2FF);"></div>
+        <div class="card__body">
+          <div class="chip" style="margin-bottom: 12px;">Website · Brand</div>
+          <h4 class="card__title">Prism SiteLaunch — FinFlow</h4>
+          <p class="card__meta">An unforgettable entrance for a Series A fintech.</p>
+        </div>
+      </article>
+      <article class="card card--case">
+        <div class="card__image" style="background: linear-gradient(135deg, #6EFFB6, #69EEFF);"></div>
+        <div class="card__body">
+          <div class="chip" style="margin-bottom: 12px;">Design system</div>
+          <h4 class="card__title">Atlas — healthcare component library</h4>
+          <p class="card__meta">96 components, 4 product surfaces, 1 quarter.</p>
+        </div>
+      </article>
+      <article class="card card--case">
+        <div class="card__image" style="background: linear-gradient(135deg, #C6A2FF, #DEC9FF);"></div>
+        <div class="card__body">
+          <div class="chip" style="margin-bottom: 12px;">Event · Motion</div>
+          <h4 class="card__title">Orbit — founder summit identity</h4>
+          <p class="card__meta">Spatial brand for a 400-person gathering.</p>
+        </div>
+      </article>
+    </div>
+
+    <!-- SiteLaunch cards -->
+    <h3 style="margin-bottom: 16px;">SiteLaunch trio</h3>
+    <div class="grid-3" style="margin-bottom: 48px;">
+      <div class="site-card site-card--prism">
+        <div class="site-card__glow"></div>
+        <a class="arrow-link" href="#" style="align-self: flex-start; position: relative;">↗</a>
+        <div>
+          <h4 style="color: var(--white);">Prism SiteLaunch</h4>
+          <p>For brands ready to make an unforgettable entrance.</p>
+        </div>
+      </div>
+      <div class="site-card site-card--rocket">
+        <div class="site-card__glow"></div>
+        <a class="arrow-link" href="#" style="align-self: flex-start; position: relative; color: var(--holo-cyan-pale);">↗</a>
+        <div>
+          <h4 style="color: var(--white);">Rocket SiteLaunch</h4>
+          <p>For growth-focused brands ready to fuel conversions.</p>
+        </div>
+      </div>
+      <div class="site-card site-card--orbit">
+        <div class="site-card__glow"></div>
+        <a class="arrow-link" href="#" style="align-self: flex-start; position: relative;">↗</a>
+        <div>
+          <h4 style="color: var(--white);">Orbit SiteLaunch</h4>
+          <p>For scaling companies needing clarity, structure, and alignment.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Value item list -->
+    <h3 style="margin-bottom: 16px;">List item · icon + copy</h3>
+    <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+      <div style="display: grid; gap: 16px;">
+        <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div><strong style="display: block; margin-bottom: 4px;">Relationships first</strong><span class="muted">We work with people, not logos.</span></div>
+        </div>
+        <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div><strong style="display: block; margin-bottom: 4px;">Creative systems</strong><span class="muted">Always building together to drive outcomes.</span></div>
+        </div>
+        <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div><strong style="display: block; margin-bottom: 4px;">Founding energy</strong><span class="muted">Every project is a chance for something big.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PATTERNS ══════════ -->
+<section class="ds-section" id="patterns">
+  <div class="ds-inner">
+    <div class="ds-section__label">06 — Patterns</div>
+    <h2 class="ds-section__title">Sections, assembled.</h2>
+    <p class="ds-section__intro">Three canonical page sections as shipping examples. These are the recipes — same ingredients, consistent outcomes.</p>
+
+    <!-- Marketing hero -->
+    <div class="demo-label">Pattern · Hero</div>
+    <div style="position: relative; border-radius: var(--r-2xl); overflow: hidden; border: 1px solid var(--white-10); min-height: 520px; display: flex; flex-direction: column; margin-bottom: 48px;">
+      <div class="holo-bg">
+        <div class="holo-bg__grad"></div>
+        <div class="holo-bg__waves"></div>
+        <div class="holo-bg__veil"></div>
+      </div>
+      <nav class="navbar" style="position: relative; z-index: 2; background: transparent;">
+        <div class="navbar__logo"><img src="assets/logos/wordmark-white.svg" alt="" style="height: 24px;"></div>
+        <div class="navbar__nav">
+          <a class="navbar__link" href="#">Work</a>
+          <a class="navbar__link" href="#">Services</a>
+          <a class="navbar__link" href="#">About</a>
+        </div>
+        <div class="navbar__actions">
+          <button class="btn btn--primary btn--small">Let's talk →</button>
+        </div>
+      </nav>
+      <div style="position: relative; z-index: 2; padding: 80px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+        <div class="chip chip--mint chip--dot" style="margin-bottom: 24px; align-self: flex-start;">Creative agency · Est. 2021</div>
+        <h1 style="font-size: clamp(40px, 7vw, 96px); line-height: 1; letter-spacing: -0.015em; max-width: 900px;">Creative foundations for brands of <em style="color: var(--mint); font-style: italic;">all sizes</em>.</h1>
+        <p style="font-size: 20px; color: var(--text-dim); max-width: 600px; margin-top: 24px;">Web, brand, and design systems that drive better outcomes and stronger growth for businesses.</p>
+        <div style="display: flex; gap: 16px; margin-top: 40px;">
+          <button class="btn btn--primary">See our work <span class="arrow">→</span></button>
+          <button class="btn btn--secondary">Our services <span class="arrow">→</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA block -->
+    <div class="demo-label">Pattern · Full-bleed CTA</div>
+    <div style="position: relative; border-radius: var(--r-2xl); overflow: hidden; padding: 80px; min-height: 320px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px;
+                background: conic-gradient(from 220deg, var(--holo-cyan-lt), var(--holo-cyan-pale), var(--white), var(--holo-lavender-lt), var(--holo-cyan-lt));">
+      <div style="max-width: 560px;">
+        <h3 style="color: #000; font-size: 56px; line-height: 1.05; letter-spacing: -0.01em;">Your custom website starts <em style="font-style: italic;">here.</em></h3>
+        <p style="color: rgba(0,0,0,0.7); font-size: 18px; margin-top: 12px;">Tailored web packages designed to match your goals.</p>
+      </div>
+      <button class="btn" style="background: rgba(28,28,30,0.9); color: var(--white); border-color: rgba(28,28,30,0.9);">Find the right fit <span class="arrow">→</span></button>
+    </div>
+
+    <!-- Footer -->
+    <div class="demo-label">Pattern · Footer</div>
+    <footer style="position: relative; padding: 80px; background: var(--n-black); border: 1px solid var(--white-10); border-radius: var(--r-2xl); overflow: hidden;">
+      <div style="position: absolute; inset: 0; opacity: 0.15;">
+        <img src="assets/logos/wave-white.svg" alt="" style="width: 150%; position: absolute; bottom: -10%; left: -25%;">
+      </div>
+      <div style="position: relative; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;">
+        <div>
+          <img src="assets/logos/wordmark-white.svg" alt="" style="height: 40px; margin-bottom: 24px;">
+          <p class="muted" style="font-size: 16px; max-width: 300px;">Creative foundations for brands of all sizes.</p>
+          <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <button class="btn btn--primary">Let's talk <span class="arrow">→</span></button>
+          </div>
+        </div>
+        <div>
+          <div class="mono-up muted" style="margin-bottom: 16px;">Services</div>
+          <div class="stack-3" style="font-size: 16px;">
+            <div>Launch · Websites</div>
+            <div>Shape · Brands</div>
+            <div>Design · Systems</div>
+            <div>Transform · Events</div>
+            <div>Animate · Stories</div>
+          </div>
+        </div>
+        <div>
+          <div class="mono-up muted" style="margin-bottom: 16px;">Studio</div>
+          <div class="stack-3" style="font-size: 16px;">
+            <div>Our work</div>
+            <div>How we work</div>
+            <div>Field notes</div>
+            <div>About</div>
+          </div>
+        </div>
+        <div>
+          <div class="mono-up muted" style="margin-bottom: 16px;">Say hi</div>
+          <div class="stack-3" style="font-size: 16px;">
+            <div>hello@foundingcreative.com</div>
+            <div>Portland · Remote</div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</section>
+
+<!-- ══════════ USAGE ══════════ -->
+<section class="ds-section" id="usage">
+  <div class="ds-inner">
+    <div class="ds-section__label">07 — Usage</div>
+    <h2 class="ds-section__title">Pick up the system.</h2>
+    <p class="ds-section__intro">Link the two stylesheets, choose a scheme, and build.</p>
+
+    <div class="grid-2">
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label" style="color: var(--mint);">HTML</div>
+<pre style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px; line-height: 1.6; color: var(--text-dim); white-space: pre-wrap; margin: 16px 0 0;">&lt;link rel="stylesheet" href="css/tokens.css"&gt;
+&lt;link rel="stylesheet" href="css/components.css"&gt;
+
+&lt;body&gt;
+  &lt;nav class="navbar"&gt;…&lt;/nav&gt;
+  &lt;button class="btn btn--primary"&gt;
+    See our work
+  &lt;/button&gt;
+&lt;/body&gt;</pre>
+      </div>
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label" style="color: var(--mint);">Tokens (CSS vars)</div>
+<pre style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px; line-height: 1.6; color: var(--text-dim); white-space: pre-wrap; margin: 16px 0 0;">color: var(--mint);
+background: var(--n-black);
+border-radius: var(--r-lg);
+font-family: var(--font-display);
+box-shadow: var(--glow-mint);
+
+/* Swap schemes */
+&lt;div class="scheme-mint"&gt;…&lt;/div&gt;</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ds-foot">
+  Founding Creative · Internal design system · v1.0 · April 2026
+</div>
+
+<script>
+(async () => {
+  try {
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+  } catch (e) {}
+  await new Promise(r => setTimeout(r, 600));
+  window.print();
+})();
+</script>
+
+</body>
+</html>
