@@ -201,8 +201,11 @@
   --shadow-lg: 0 4px 8px 0 rgba(0,0,0,0.2);
   --shadow-xl: 0 8px 32px -4px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.1);
   --shadow-2xl: 0 20px 60px -12px rgba(0,0,0,0.5);
-  --glow-mint: 0 0 40px rgba(126,248,147,0.35);
-  --glow-white: 0 0 12px rgba(255,255,255,0.6);
+  --glow-mint:      0 0 40px rgba(126,248,147,0.45);
+  --glow-cyan:      0 0 40px rgba(105,238,255,0.45);
+  --glow-holo-mint: 0 0 40px rgba(110,255,182,0.45);
+  --glow-lavender:  0 0 40px rgba(198,162,255,0.45);
+  --glow-white:     0 0 24px rgba(255,255,255,0.55);
 
   /* ── Spacing (8pt grid) ─────────────────────────────────── */
   --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
