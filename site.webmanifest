@@ -1,0 +1,16 @@
+{
+  "name": "Founding Creative Design System",
+  "short_name": "FC Design",
+  "description": "The single source of truth for Founding Creative's visual language.",
+  "start_url": "/",
+  "display": "browser",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
