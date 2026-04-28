@@ -390,27 +390,25 @@
   <div class="ds-inner">
     <div class="how-section__label">02 — Claude Design</div>
     <h2 class="how-section__title">Claude Design</h2>
-    <p class="how-section__intro">Use the built-in skill to load the full design system — tokens, components, brand rules — fresh from the live repo at the start of every session.</p>
+    <p class="how-section__intro">Set up a design system in Claude Design once, connected to this repo, and every session starts with the full token set, component library, and brand rules already loaded.</p>
     <ol class="step-list">
       <li class="step">
         <span class="step__num">01</span>
-        <div class="step__body">Start a new <strong>Claude Design</strong> session (claude.ai), then invoke the skill:
-          <code class="code-block">/founding-creative-design</code>
-          Claude will immediately fetch the latest <strong>tokens.css</strong>, <strong>components.css</strong>, <strong>README.md</strong>, and <strong>CLAUDE.md</strong> directly from main — no stale snapshots, no manual imports.
-        </div>
+        <div class="step__body">Go to <strong>claude.ai</strong>, open <strong>Design</strong>, and start creating a new design system.</div>
       </li>
       <li class="step">
         <span class="step__num">02</span>
-        <div class="step__body">Start your request. Claude now knows the full palette, type scale, component classes, brand voice rules, and output conventions before it writes a single line.</div>
+        <div class="step__body">For <strong>Company name and blurb</strong>, enter:<code class="code-block">Founding Creative — brand and web design agency</code></div>
       </li>
       <li class="step">
         <span class="step__num">03</span>
-        <div class="step__body"><strong>Every new session, re-invoke the skill.</strong> It has no bundled snapshot — it always fetches live. If the repo has been updated since your last session, Claude automatically works from the newest version.</div>
+        <div class="step__body">Under <strong>Link code on GitHub</strong>, paste the repo URL and click <strong>Add</strong>:<code class="code-block">https://github.com/foundingadmin/DesignSystem-Founding</code>Claude Design will pull in the tokens, components, brand rules, and architecture notes directly from main.</div>
+      </li>
+      <li class="step">
+        <span class="step__num">04</span>
+        <div class="step__body">Click <strong>Continue to generation</strong>. That's it — your design system is connected. Future sessions can re-invoke it with:<code class="code-block">/founding-creative-design</code></div>
       </li>
     </ol>
-    <div class="callout">
-      <strong>Alternatively</strong>, add the repo as permanent context via <strong>Projects → Project Knowledge</strong> in Claude.ai and paste in <code style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px;">https://github.com/foundingadmin/DesignSystem-Founding</code>. This loads the system automatically in every conversation within that project without needing to invoke the skill.
-    </div>
   </div>
 </section>
 
