@@ -93,8 +93,45 @@
   color: var(--text);
   border: 1px solid var(--white-10);
 }
-.chip--mint { background: rgba(126,248,147,0.15); color: var(--mint); border-color: rgba(126,248,147,0.3); }
-.chip--dot::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--mint); }
+.chip--mint        { background: rgba(126,248,147,0.15); color: var(--mint);          border-color: rgba(126,248,147,0.30); }
+.chip--cyan        { background: rgba(105,238,255,0.15); color: var(--holo-cyan);     border-color: rgba(105,238,255,0.30); }
+.chip--cyan-pale   { background: rgba(191,255,223,0.12); color: var(--holo-cyan-pale);border-color: rgba(191,255,223,0.28); }
+.chip--holo-mint   { background: rgba(110,255,182,0.15); color: var(--holo-mint);     border-color: rgba(110,255,182,0.30); }
+.chip--lavender    { background: rgba(198,162,255,0.15); color: var(--holo-lavender); border-color: rgba(198,162,255,0.30); }
+.chip--lavender-lt { background: rgba(222,201,255,0.12); color: var(--holo-lavender-lt); border-color: rgba(222,201,255,0.28); }
+
+/* Dot indicator — color inherits from chip variant */
+.chip--dot::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+/* Micro-icon slot */
+.chip__icon { width: 14px; height: 14px; display: inline-flex; flex-shrink: 0; }
+.chip__icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Hover behaviors — apply alongside color variant */
+.chip--link { cursor: pointer; text-decoration: none; transition: background .2s ease, box-shadow .2s ease, transform .15s ease, border-color .2s ease; }
+
+.chip--hover-fill.chip--mint:hover        { background: rgba(126,248,147,0.32); border-color: rgba(126,248,147,0.55); }
+.chip--hover-fill.chip--cyan:hover        { background: rgba(105,238,255,0.32); border-color: rgba(105,238,255,0.55); }
+.chip--hover-fill.chip--cyan-pale:hover   { background: rgba(191,255,223,0.28); border-color: rgba(191,255,223,0.50); }
+.chip--hover-fill.chip--holo-mint:hover   { background: rgba(110,255,182,0.32); border-color: rgba(110,255,182,0.55); }
+.chip--hover-fill.chip--lavender:hover    { background: rgba(198,162,255,0.32); border-color: rgba(198,162,255,0.55); }
+.chip--hover-fill.chip--lavender-lt:hover { background: rgba(222,201,255,0.28); border-color: rgba(222,201,255,0.50); }
+
+.chip--hover-glow.chip--mint:hover        { box-shadow: 0 0 14px rgba(126,248,147,0.55); }
+.chip--hover-glow.chip--cyan:hover        { box-shadow: 0 0 14px rgba(105,238,255,0.60); }
+.chip--hover-glow.chip--holo-mint:hover   { box-shadow: 0 0 14px rgba(110,255,182,0.55); }
+.chip--hover-glow.chip--lavender:hover    { box-shadow: 0 0 14px rgba(198,162,255,0.55); }
+
+.chip--hover-lift:hover { transform: translateY(-2px); }
+
+.chip--hover-underline { position: relative; }
+.chip--hover-underline::after {
+  content: ""; position: absolute; bottom: 0; left: 12px; right: 12px;
+  height: 1px; background: currentColor;
+  transform: scaleX(0); transition: transform .2s ease;
+  transform-origin: left;
+}
+.chip--hover-underline:hover::after { transform: scaleX(1); }
 
 /* ── Navbar ───────────────────────────────────────────────── */
 .navbar {
@@ -141,6 +178,38 @@
 .card--scheme-navy  { background: var(--deep-navy);  border-color: var(--holo-cyan); }
 .card--scheme-teal  { background: var(--deep-teal);  border-color: var(--holo-cyan-pale); }
 .card--scheme-plum  { background: var(--deep-plum);  border-color: var(--holo-lavender); }
+
+/* Card hover variants */
+.card--interactive {
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.card--hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+}
+.card--hover-glow:hover {
+  box-shadow: 0 0 32px rgba(126,248,147,0.28);
+  border-color: rgba(126,248,147,0.35);
+}
+/* Reveal: dark overlay with CTA text fades in on hover */
+.card--hover-reveal .card__image { overflow: hidden; }
+.card__reveal {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.52);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--white);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.card--hover-reveal:hover .card__reveal { opacity: 1; }
+/* Tint: desaturated by default, saturates on hover */
+.card--hover-tint .card__image {
+  filter: grayscale(0.8);
+  transition: filter .35s ease;
+}
+.card--hover-tint:hover .card__image { filter: grayscale(0); }
 
 /* ── Icon tile (hero glyph container) ─────────────────────── */
 .icon-tile {
@@ -224,3 +293,40 @@
 .muted { color: var(--text-dim); }
 .display { font-family: var(--font-display); font-weight: 500; letter-spacing: var(--tracking-display); }
 .mono-up { text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; font-weight: 600; }
+
+/* ── SiteLaunch trio · hover microinteractions ─────────── */
+.site-card {
+  cursor: pointer;
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.site-card:hover { transform: translateY(-5px); }
+.site-card--prism:hover  {
+  box-shadow: 0 20px 56px rgba(105,238,255,0.22), 0 4px 16px rgba(0,0,0,0.35);
+  border-color: var(--holo-cyan-lt);
+}
+.site-card--rocket:hover {
+  box-shadow: 0 20px 56px rgba(110,255,182,0.18), 0 4px 16px rgba(0,0,0,0.35);
+  border-color: var(--holo-mint);
+}
+.site-card--orbit:hover  {
+  box-shadow: 0 20px 56px rgba(198,162,255,0.22), 0 4px 16px rgba(0,0,0,0.35);
+  border-color: var(--holo-lavender-lt);
+}
+/* Glow orb intensifies on hover */
+.site-card .site-card__glow { transition: opacity .3s ease; }
+.site-card:hover .site-card__glow { opacity: 0.72; }
+/* Arrow nudges diagonally */
+.arrow-link { display: inline-block; transition: transform .25s ease; }
+.site-card:hover .arrow-link { transform: translate(3px, -3px); }
+
+/* ── Responsive · components ───────────────────────────── */
+@media (max-width: 768px) {
+  .navbar { height: 64px; padding: 0 24px; }
+  .navbar__nav { display: none; }
+  .navbar__actions { gap: 8px; }
+  .site-card { min-height: 280px; }
+}
+@media (max-width: 480px) {
+  .navbar { height: 56px; padding: 0 16px; }
+  .site-card { min-height: 200px; padding: 24px; }
+}

@@ -38,9 +38,8 @@
   .hero__title {
     position: relative; z-index: 2;
     font-family: var(--font-display); font-weight: 500;
-    font-size: clamp(56px, 8vw, 140px); line-height: 0.95;
-    letter-spacing: -0.015em; max-width: 1100px;
-    text-wrap: balance;
+    font-size: clamp(44px, 8vw, 140px); line-height: 0.95;
+    letter-spacing: -0.015em;
   }
   .hero__title em { font-style: italic; color: var(--mint); }
   .hero__sub {
@@ -229,6 +228,245 @@
     font-size: 12px; color: var(--text-dim);
     letter-spacing: 0.02em;
   }
+
+  /* Gelica matrix header row */
+  .gelica-head {
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr;
+    gap: 24px;
+    padding: 20px 32px;
+    border-bottom: 1px solid var(--white-10);
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 12px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+
+  /* Pattern block classes — controls responsive reflow */
+  .footer-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+  .cta-pattern {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+  .pattern-hero-body {
+    position: relative; z-index: 2;
+    padding: 80px; flex: 1;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+
+  /* ── Mobile nav · hamburger ─────────────────────────────── */
+  .ds-nav__hamburger {
+    display: none;
+    background: none; border: none; cursor: pointer;
+    margin-left: auto; padding: 6px;
+    width: 36px; height: 36px;
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px;
+  }
+  .ds-nav__hamburger span {
+    display: block; width: 20px; height: 1.5px;
+    background: var(--white); border-radius: 2px;
+    transform-origin: center;
+    transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .2s ease;
+  }
+  .ds-nav__hamburger.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .ds-nav__hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .ds-nav__hamburger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* ── Mobile nav · modal ──────────────────────────────────── */
+  .nav-modal {
+    position: fixed; inset: 0; z-index: 200;
+    pointer-events: none; overflow: hidden;
+  }
+  .nav-modal.is-open { pointer-events: all; }
+
+  .nav-modal__backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+  .nav-modal.is-open .nav-modal__backdrop { opacity: 1; }
+
+  .nav-modal__panel {
+    position: absolute; inset: 0;
+    background: var(--n-black);
+    display: flex; flex-direction: column;
+    padding: 0 32px 48px;
+    transform: translateX(100%);
+    transition: transform .42s cubic-bezier(.4,0,.2,1);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .nav-modal.is-open .nav-modal__panel { transform: none; }
+
+  /* Holo glow accent — brand texture at bottom corner */
+  .nav-modal__holo {
+    position: absolute; bottom: -120px; right: -120px;
+    width: 520px; height: 520px; border-radius: 50%;
+    background: conic-gradient(from 40deg, var(--holo-cyan), var(--holo-mint), var(--holo-lavender), var(--holo-cyan));
+    filter: blur(90px);
+    opacity: 0.07;
+    pointer-events: none;
+  }
+
+  .nav-modal__header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--white-10);
+    flex-shrink: 0;
+  }
+  .nav-modal__logo { height: 24px; }
+  .nav-modal__close {
+    background: none; border: 1px solid var(--white-20);
+    border-radius: var(--r-full); color: var(--white);
+    cursor: pointer; flex-shrink: 0;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .nav-modal__close:hover { background: var(--white-10); border-color: var(--white-40); }
+  .nav-modal__close svg { display: block; }
+
+  .nav-modal__links { display: flex; flex-direction: column; margin-top: 16px; flex: 1; }
+
+  .nav-modal__link {
+    display: flex; align-items: baseline; gap: 14px;
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(36px, 10vw, 54px);
+    line-height: 1.1; letter-spacing: -0.01em;
+    color: var(--white);
+    padding: 18px 0;
+    border-bottom: 1px solid var(--white-10);
+    text-decoration: none;
+    /* starts invisible, animates in when modal opens */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: color .2s ease, opacity .38s ease, transform .38s ease;
+  }
+  .nav-modal__link:last-child { border-bottom: none; }
+  .nav-modal__link::before {
+    content: attr(data-num);
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 11px; font-weight: 400;
+    color: var(--text-dim); letter-spacing: 0.06em;
+    padding-bottom: 4px; flex-shrink: 0;
+    transition: color .2s ease;
+  }
+  .nav-modal__link:hover,
+  .nav-modal__link:focus-visible { color: var(--mint); outline: none; }
+  .nav-modal__link:hover::before { color: var(--mint); }
+
+  /* Staggered entrance */
+  .nav-modal.is-open .nav-modal__link               { opacity: 1; transform: none; }
+  .nav-modal.is-open .nav-modal__link:nth-child(1)  { transition-delay: .08s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(2)  { transition-delay: .13s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(3)  { transition-delay: .18s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(4)  { transition-delay: .23s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(5)  { transition-delay: .28s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(6)  { transition-delay: .33s; }
+
+  .nav-modal__foot { padding-top: 32px; flex-shrink: 0; }
+
+  /* ── Responsive breakpoints ─────────────────────────────── */
+
+  /* Ultrawide (≥ 1600px) — constrain hero title to half-screen */
+  @media (min-width: 1600px) {
+    .hero__title { max-width: 50vw; }
+  }
+
+  /* Large tablet / narrow desktop (≤ 1100px) */
+  @media (max-width: 1100px) {
+    .ds-section { padding: 80px 40px; }
+    .ds-section__title { font-size: 64px; }
+    .hero { padding: 100px 40px 48px; }
+    .grid-6 { grid-template-columns: repeat(3, 1fr); }
+    .logo-grid { grid-template-columns: repeat(2, 1fr); }
+    .gelica-head,
+    .gelica-row { grid-template-columns: 140px 1fr 1fr; gap: 16px; }
+    .scale-row { grid-template-columns: 100px 1fr 160px; gap: 16px; }
+  }
+
+  /* Tablet (≤ 768px) */
+  @media (max-width: 768px) {
+    .ds-nav { padding: 12px 20px; gap: 12px; }
+    .ds-nav__links { display: none; }
+    .ds-nav__version { display: none; }
+    .ds-nav__hamburger { display: flex; }
+
+    .ds-section { padding: 60px 24px; }
+    .ds-section__title { font-size: 48px; }
+    .ds-section__intro { font-size: 17px; margin-bottom: 48px; }
+
+    .hero { padding: 72px 24px 36px; min-height: 520px; }
+    .hero__title { font-size: clamp(36px, 7.5vw, 72px); }
+    .hero__sub { font-size: 17px; margin-top: 20px; max-width: 100%; }
+    .hero__meta { flex-wrap: wrap; gap: 16px 24px; padding-top: 20px; }
+
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-6 { grid-template-columns: repeat(2, 1fr); }
+    .grid-12 { grid-template-columns: repeat(3, 1fr); }
+    .logo-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .scale-row { grid-template-columns: 80px 1fr; gap: 12px; }
+    .scale-row__meta { display: none; }
+
+    .gelica-head { grid-template-columns: 130px 1fr; padding: 16px 20px; }
+    .gelica-head > span:last-child { display: none; }
+    .gelica-row { grid-template-columns: 130px 1fr; gap: 12px; padding: 16px 20px; }
+    .gelica-row > span:last-child { display: none; }
+
+    .holo-stage { aspect-ratio: 16 / 9; }
+    .holo-stage__title { font-size: clamp(24px, 5vw, 52px); }
+    .holo-stage__content { padding: 24px; }
+
+    .demo-row { padding: 20px; }
+
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .pattern-hero-body { padding: 40px; }
+  }
+
+  /* Mobile (≤ 480px) */
+  @media (max-width: 480px) {
+    .ds-nav { padding: 10px 16px; }
+
+    .ds-section { padding: 48px 16px; }
+    .ds-section__title { font-size: 36px; line-height: 1.1; }
+    .ds-section__intro { font-size: 16px; margin-bottom: 36px; }
+
+    .hero { padding: 56px 16px 28px; min-height: 400px; }
+    .hero__title { font-size: clamp(28px, 9vw, 48px); }
+    .hero__sub { font-size: 16px; }
+    .hero__meta { flex-direction: column; gap: 12px; }
+
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-6 { grid-template-columns: repeat(2, 1fr); }
+    .grid-12 { grid-template-columns: repeat(2, 1fr); }
+    .logo-grid { grid-template-columns: 1fr; }
+
+    .scale-row { grid-template-columns: 1fr; padding: 16px 0; }
+    .scale-row__label { font-size: 11px; }
+
+    .gelica-head { grid-template-columns: 110px 1fr; padding: 12px 16px; }
+    .gelica-row { grid-template-columns: 110px 1fr; padding: 14px 16px; gap: 10px; }
+
+    .holo-stage { aspect-ratio: 4 / 3; }
+    .shadow-demo, .radius-demo { font-size: 11px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    .pattern-hero-body { padding: 24px; }
+    .ds-foot { padding: 48px 16px; }
+  }
 </style>
 </head>
 <body>
@@ -236,7 +474,7 @@
 <!-- ══════════ Top nav ══════════ -->
 <nav class="ds-nav">
   <img class="ds-nav__logo" src="assets/logos/wordmark-white.svg" alt="Founding Creative">
-  <span class="chip chip--mint chip--dot" style="font-size:11px;">v1.1 · Design System</span>
+  <span class="ds-nav__version chip chip--mint chip--dot" style="font-size:11px;">v1.1 · Design System</span>
   <div class="ds-nav__links">
     <a href="#brand">Brand</a>
     <a href="#color">Color</a>
@@ -245,7 +483,35 @@
     <a href="#components">Components</a>
     <a href="#patterns">Patterns</a>
   </div>
+  <button class="ds-nav__hamburger" id="nav-toggle" aria-label="Open navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile navigation modal -->
+<div class="nav-modal" id="nav-modal" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="nav-modal__backdrop" id="nav-backdrop"></div>
+  <div class="nav-modal__panel">
+    <div class="nav-modal__holo"></div>
+    <div class="nav-modal__header">
+      <img src="assets/logos/wordmark-white.svg" alt="Founding Creative" class="nav-modal__logo">
+      <button class="nav-modal__close" id="nav-close" aria-label="Close navigation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="nav-modal__links">
+      <a href="#brand"      class="nav-modal__link" data-num="01">Brand</a>
+      <a href="#color"      class="nav-modal__link" data-num="02">Color</a>
+      <a href="#type"       class="nav-modal__link" data-num="03">Type</a>
+      <a href="#spacing"    class="nav-modal__link" data-num="04">Spacing</a>
+      <a href="#components" class="nav-modal__link" data-num="05">Components</a>
+      <a href="#patterns"   class="nav-modal__link" data-num="06">Patterns</a>
+    </nav>
+    <div class="nav-modal__foot">
+      <span class="chip chip--mint chip--dot" style="font-size:11px;">v1.1 · Design System</span>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════ HERO ══════════ -->
 <section class="hero" id="top">
@@ -505,7 +771,7 @@
     <h3 style="margin: 80px 0 24px;">Gelica — full family</h3>
     <p class="ds-section__intro" style="margin-bottom: 32px;">All 10 upright weights and their italic counterparts. Reach outside the default (Medium 500) rarely and intentionally — Gelica Black is for press only; Gelica ExtraLight for airy editorial layouts.</p>
     <div style="border: 1px solid var(--white-10); border-radius: var(--r-xl); background: var(--n-ink); overflow: hidden;">
-      <div style="display: grid; grid-template-columns: 180px 1fr 1fr; gap: 24px; padding: 20px 32px; border-bottom: 1px solid var(--white-10); font-family: ui-monospace, monospace; font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em;">
+      <div class="gelica-head">
         <span>Weight</span><span>Upright</span><span>Italic</span>
       </div>
       <div class="gelica-matrix">
@@ -861,7 +1127,9 @@
 
     <!-- Value item list -->
     <h3 style="margin-bottom: 16px;">List item · icon + copy</h3>
-    <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+
+    <div class="demo-label" style="margin-bottom: 12px;">Short copy · single line</div>
+    <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg); margin-bottom: 16px;">
       <div style="display: grid; gap: 16px;">
         <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -874,6 +1142,73 @@
         <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
           <div><strong style="display: block; margin-bottom: 4px;">Founding energy</strong><span class="muted">Every project is a chance for something big.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-label" style="margin-bottom: 12px;">Long copy · wrapping body text</div>
+    <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg); margin-bottom: 16px;">
+      <div style="display: grid; gap: 24px;">
+        <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div>
+            <strong style="display: block; margin-bottom: 8px;">Relationships first</strong>
+            <span class="muted">We work with people, not logos. Every engagement starts with listening — understanding the humans behind the brand, what they're building toward, and what success actually looks like in six months and three years. That clarity shapes everything we make together.</span>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div>
+            <strong style="display: block; margin-bottom: 8px;">Creative systems, not one-offs</strong>
+            <span class="muted">We build systems that scale. A website is never just a website — it's a component library, a content model, a set of decisions that will be inherited and extended by whoever comes next. We think that through from day one, so the work compounds instead of just shipping.</span>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div>
+            <strong style="display: block; margin-bottom: 8px;">Founding energy in every sprint</strong>
+            <span class="muted">Every project is a chance for something big. We show up with the intensity of a founding team, not a vendor relationship — because the work matters more when you treat it that way. That's not a posture. It's how we're built, and it shows in the output.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-label" style="margin-bottom: 12px;">Two-column grid · mixed copy lengths</div>
+    <div class="grid-2" style="margin-bottom: 48px;">
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div style="display: grid; gap: 20px;">
+          <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <div>
+              <strong style="display: block; margin-bottom: 6px;">Relationships first</strong>
+              <span class="muted">Every engagement starts with the humans behind the brand — their goals, constraints, and what they're genuinely building toward.</span>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <div>
+              <strong style="display: block; margin-bottom: 6px;">Built to last</strong>
+              <span class="muted">Systems, not snapshots. What we ship should still make sense in two years — and be easy for whoever comes next to extend.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div style="display: grid; gap: 20px;">
+          <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <div>
+              <strong style="display: block; margin-bottom: 6px;">Creative systems</strong>
+              <span class="muted">Always building together to drive outcomes that compound over time — not just ship once and move on.</span>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <div>
+              <strong style="display: block; margin-bottom: 6px;">Founding energy</strong>
+              <span class="muted">We show up with founding-team intensity, not vendor detachment — because the work matters more when you treat it that way.</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -906,7 +1241,7 @@
           <button class="btn btn--primary btn--small">Let's talk →</button>
         </div>
       </nav>
-      <div style="position: relative; z-index: 2; padding: 80px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+      <div class="pattern-hero-body">
         <div class="chip chip--mint chip--dot" style="margin-bottom: 24px; align-self: flex-start;">Creative agency · Est. 2021</div>
         <h1 style="font-size: clamp(40px, 7vw, 96px); line-height: 1; letter-spacing: -0.015em; max-width: 900px;">Creative foundations for brands of <em style="color: var(--mint); font-style: italic;">all sizes</em>.</h1>
         <p style="font-size: 20px; color: var(--text-dim); max-width: 600px; margin-top: 24px;">Web, brand, and design systems that drive better outcomes and stronger growth for businesses.</p>
@@ -919,8 +1254,7 @@
 
     <!-- CTA block -->
     <div class="demo-label">Pattern · Full-bleed CTA</div>
-    <div style="position: relative; border-radius: var(--r-2xl); overflow: hidden; padding: 80px; min-height: 320px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px;
-                background: conic-gradient(from 220deg, var(--holo-cyan-lt), var(--holo-cyan-pale), var(--white), var(--holo-lavender-lt), var(--holo-cyan-lt));">
+    <div class="cta-pattern" style="position: relative; border-radius: var(--r-2xl); overflow: hidden; padding: 80px; min-height: 320px; margin-bottom: 48px; background: conic-gradient(from 220deg, var(--holo-cyan-lt), var(--holo-cyan-pale), var(--white), var(--holo-lavender-lt), var(--holo-cyan-lt));">
       <div style="max-width: 560px;">
         <h3 style="color: #000; font-size: 56px; line-height: 1.05; letter-spacing: -0.01em;">Your custom website starts <em style="font-style: italic;">here.</em></h3>
         <p style="color: rgba(0,0,0,0.7); font-size: 18px; margin-top: 12px;">Tailored web packages designed to match your goals.</p>
@@ -934,7 +1268,7 @@
       <div style="position: absolute; inset: 0; opacity: 0.15;">
         <img src="assets/logos/wave-white.svg" alt="" style="width: 150%; position: absolute; bottom: -10%; left: -25%;">
       </div>
-      <div style="position: relative; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;">
+      <div class="footer-grid">
         <div>
           <img src="assets/logos/wordmark-white.svg" alt="" style="height: 40px; margin-bottom: 24px;">
           <p class="muted" style="font-size: 16px; max-width: 300px;">Creative foundations for brands of all sizes.</p>
@@ -1012,5 +1346,39 @@ box-shadow: var(--glow-mint);
   Founding Creative · Internal design system · v1.1 · April 2026
 </div>
 
+<script>
+(function () {
+  const toggle   = document.getElementById('nav-toggle');
+  const modal    = document.getElementById('nav-modal');
+  const closeBtn = document.getElementById('nav-close');
+  const backdrop = document.getElementById('nav-backdrop');
+
+  function openMenu() {
+    modal.classList.add('is-open');
+    toggle.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    modal.classList.remove('is-open');
+    toggle.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  toggle.addEventListener('click', () =>
+    modal.classList.contains('is-open') ? closeMenu() : openMenu()
+  );
+  closeBtn.addEventListener('click', closeMenu);
+  backdrop.addEventListener('click', closeMenu);
+  modal.querySelectorAll('.nav-modal__link').forEach(a =>
+    a.addEventListener('click', closeMenu)
+  );
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMenu();
+  });
+})();
+</script>
 </body>
 </html>
