@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How To — Founding Creative Design System</title>
+<meta name="description" content="How to connect the Founding Creative design system to Claude.ai, Claude Code, and your development workflow.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://brand.foundingcreative.com/how-to.html">
+
+<!-- Favicon & manifest -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#000000">
+
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* Skip link */
+  .skip-link {
+    position: absolute; top: -9999px; left: 16px;
+    padding: 8px 16px; background: var(--mint); color: var(--n-black);
+    font-size: 14px; font-weight: 700; border-radius: 4px;
+    text-decoration: none; z-index: 9999;
+  }
+  .skip-link:focus { top: 16px; }
+
+  body { background: var(--n-black); }
+
+  /* ── Nav ── */
+  .ds-nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; gap: 24px; align-items: center;
+    padding: 16px 32px;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--white-10);
+  }
+  .ds-nav__logo-link { display: flex; align-items: center; flex-shrink: 0; }
+  .ds-nav__logo { height: 28px; }
+  .ds-nav__links {
+    display: flex; gap: 20px; font-size: 14px;
+    color: var(--text-dim); margin-left: auto;
+  }
+  .ds-nav__links a { padding: 6px 0; position: relative; }
+  .ds-nav__links a:hover { color: var(--mint); }
+  .ds-nav__links a[aria-current="page"] { color: var(--mint); }
+  .ds-nav__hamburger {
+    display: none;
+    background: none; border: none; cursor: pointer;
+    margin-left: auto; padding: 6px;
+    width: 36px; height: 36px;
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px;
+  }
+  .ds-nav__hamburger span {
+    display: block; width: 20px; height: 1.5px;
+    background: var(--white); border-radius: 2px;
+    transform-origin: center;
+    transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .2s ease;
+  }
+  .ds-nav__hamburger.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .ds-nav__hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .ds-nav__hamburger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* ── Mobile nav modal ── */
+  .nav-modal {
+    position: fixed; inset: 0; z-index: 200;
+    pointer-events: none; overflow: hidden;
+  }
+  .nav-modal.is-open { pointer-events: all; }
+  .nav-modal__backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+  .nav-modal.is-open .nav-modal__backdrop { opacity: 1; }
+  .nav-modal__panel {
+    position: absolute; inset: 0;
+    background: var(--n-black);
+    display: flex; flex-direction: column;
+    padding: 0 32px 48px;
+    transform: translateX(100%);
+    transition: transform .42s cubic-bezier(.4,0,.2,1);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .nav-modal.is-open .nav-modal__panel { transform: none; }
+  .nav-modal__holo {
+    position: absolute; bottom: -120px; right: -120px;
+    width: 520px; height: 520px; border-radius: 50%;
+    background: conic-gradient(from 40deg, var(--holo-cyan), var(--holo-mint), var(--holo-lavender), var(--holo-cyan));
+    filter: blur(90px);
+    opacity: 0.07;
+    pointer-events: none;
+  }
+  .nav-modal__header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--white-10);
+    flex-shrink: 0;
+  }
+  .nav-modal__logo { height: 24px; }
+  .nav-modal__close {
+    background: none; border: 1px solid var(--white-20);
+    border-radius: var(--r-full); color: var(--white);
+    cursor: pointer; flex-shrink: 0;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .nav-modal__close:hover { background: var(--white-10); border-color: var(--white-40); }
+  .nav-modal__close svg { display: block; }
+  .nav-modal__links { display: flex; flex-direction: column; margin-top: 16px; flex: 1; }
+  .nav-modal__link {
+    display: flex; align-items: baseline; gap: 14px;
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(36px, 10vw, 54px);
+    line-height: 1.1; letter-spacing: -0.01em;
+    color: var(--white);
+    padding: 18px 0;
+    border-bottom: 1px solid var(--white-10);
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: color .2s ease, opacity .38s ease, transform .38s ease;
+  }
+  .nav-modal__link:last-child { border-bottom: none; }
+  .nav-modal__link::before {
+    content: attr(data-num);
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 11px; font-weight: 400;
+    color: var(--text-dim); letter-spacing: 0.06em;
+    padding-bottom: 4px; flex-shrink: 0;
+    transition: color .2s ease;
+  }
+  .nav-modal__link:hover,
+  .nav-modal__link:focus-visible { color: var(--mint); outline: none; }
+  .nav-modal__link:hover::before { color: var(--mint); }
+  .nav-modal__link[aria-current="page"],
+  .nav-modal__link[aria-current="page"]::before { color: var(--mint); }
+  .nav-modal.is-open .nav-modal__link              { opacity: 1; transform: none; }
+  .nav-modal.is-open .nav-modal__link:nth-child(1) { transition-delay: .08s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(2) { transition-delay: .13s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(3) { transition-delay: .18s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(4) { transition-delay: .23s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(5) { transition-delay: .28s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(6) { transition-delay: .33s; }
+  .nav-modal.is-open .nav-modal__link:nth-child(7) { transition-delay: .38s; }
+  .nav-modal__foot { padding-top: 32px; flex-shrink: 0; }
+
+  /* ── Page hero ── */
+  .hw-hero {
+    padding: 96px 64px 80px;
+    border-bottom: 1px solid var(--white-10);
+    position: relative; overflow: hidden;
+  }
+  .hw-hero::before {
+    content: '';
+    position: absolute; bottom: -200px; right: -200px;
+    width: 700px; height: 700px; border-radius: 50%;
+    background: conic-gradient(from 40deg, var(--holo-cyan), var(--holo-mint), var(--holo-lavender), var(--holo-cyan));
+    filter: blur(130px);
+    opacity: 0.05;
+    pointer-events: none;
+  }
+  .hw-hero__label {
+    color: var(--mint); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 20px;
+  }
+  .hw-hero__title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(48px, 7vw, 96px); line-height: 0.95;
+    letter-spacing: -0.02em; margin: 0 0 32px;
+  }
+  .hw-hero__title em { font-style: italic; color: var(--mint); }
+  .hw-hero__sub {
+    font-size: 20px; line-height: 1.6; color: var(--text-dim); max-width: 640px;
+  }
+
+  /* ── Shared layout ── */
+  .ds-inner { max-width: 1312px; margin: 0 auto; }
+
+  /* ── Content sections ── */
+  .how-section { padding: 96px 64px; border-bottom: 1px solid var(--white-10); position: relative; }
+  .how-section__label {
+    color: var(--mint); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 16px;
+  }
+  .how-section__title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(36px, 4.5vw, 64px); line-height: 1.0;
+    letter-spacing: -0.01em; margin: 0 0 20px;
+  }
+  .how-section__intro {
+    font-size: 18px; line-height: 1.6; color: var(--text-dim);
+    max-width: 640px; margin: 0 0 56px;
+  }
+
+  /* ── Link cards ── */
+  .link-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .link-card {
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 28px 32px;
+    background: var(--n-ink);
+    border: 1px solid var(--white-10);
+    border-radius: var(--r-lg);
+    text-decoration: none;
+    transition: border-color .2s ease;
+  }
+  .link-card:hover { border-color: var(--white-20); }
+  .link-card__label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .link-card__url {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 14px; color: var(--mint); margin-top: 2px;
+  }
+  .link-card__desc { font-size: 14px; color: var(--text-dim); margin-top: 8px; line-height: 1.5; }
+
+  /* ── Steps ── */
+  .step-list { list-style: none; margin: 0; padding: 0; }
+  .step {
+    display: grid; grid-template-columns: 52px 1fr;
+    gap: 28px; align-items: start;
+    padding: 36px 0;
+    border-top: 1px solid var(--white-10);
+  }
+  .step:last-child { border-bottom: 1px solid var(--white-10); }
+  .step__num {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 12px; color: var(--text-dim);
+    letter-spacing: 0.1em; padding-top: 3px;
+  }
+  .step__body { font-size: 17px; line-height: 1.65; color: var(--text-dim); }
+  .step__body strong { color: var(--white); font-weight: 600; }
+
+  /* ── Code block ── */
+  .code-block {
+    display: block;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--white-10);
+    border-radius: var(--r-lg);
+    padding: 18px 22px;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 13px; line-height: 1.6;
+    color: var(--mint);
+    overflow-x: auto;
+    margin: 16px 0 0;
+    white-space: pre;
+  }
+
+  /* ── Callout ── */
+  .callout {
+    background: var(--n-ink);
+    border-left: 2px solid var(--mint);
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    padding: 20px 24px;
+    font-size: 15px; line-height: 1.6;
+    color: var(--text-dim);
+    margin: 40px 0 0;
+  }
+  .callout strong { color: var(--white); }
+  .callout a { color: var(--mint); }
+
+  /* ── Footer ── */
+  .ds-foot {
+    padding: 80px 64px; text-align: center;
+    color: var(--text-dim); font-size: 14px;
+  }
+
+  /* ── Tablet ── */
+  @media (max-width: 768px) {
+    .ds-nav { padding: 12px 20px; gap: 12px; }
+    .ds-nav__links { display: none; }
+    .ds-nav__version { display: none; }
+    .ds-nav__hamburger { display: flex; }
+
+    .hw-hero { padding: 60px 24px 48px; }
+    .hw-hero__sub { font-size: 17px; }
+
+    .how-section { padding: 60px 24px; }
+    .how-section__intro { font-size: 17px; margin-bottom: 40px; }
+
+    .link-cards { grid-template-columns: 1fr; }
+
+    .step { grid-template-columns: 40px 1fr; gap: 16px; padding: 28px 0; }
+    .step__body { font-size: 16px; }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 480px) {
+    .ds-nav { padding: 10px 16px; }
+    .hw-hero { padding: 48px 16px 36px; }
+    .how-section { padding: 48px 16px; }
+    .how-section__intro { font-size: 16px; margin-bottom: 32px; }
+    .step { grid-template-columns: 36px 1fr; gap: 12px; padding: 24px 0; }
+    .step__body { font-size: 15px; }
+    .ds-foot { padding: 48px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<!-- ══════════ Top nav ══════════ -->
+<nav class="ds-nav" aria-label="Primary">
+  <a href="index.html" class="ds-nav__logo-link">
+    <img class="ds-nav__logo" src="assets/logos/wordmark-white.svg" alt="Founding Creative">
+  </a>
+  <span class="ds-nav__version chip chip--mint chip--dot" style="font-size:11px;">v1.1 · Design System</span>
+  <div class="ds-nav__links">
+    <a href="index.html#brand">Brand</a>
+    <a href="index.html#color">Color</a>
+    <a href="index.html#type">Type</a>
+    <a href="index.html#spacing">Spacing</a>
+    <a href="index.html#components">Components</a>
+    <a href="index.html#patterns">Patterns</a>
+    <a href="how-to.html" aria-current="page">How To</a>
+  </div>
+  <button class="ds-nav__hamburger" id="nav-toggle" aria-label="Open navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile navigation modal -->
+<div class="nav-modal" id="nav-modal" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="nav-modal__backdrop" id="nav-backdrop"></div>
+  <div class="nav-modal__panel">
+    <div class="nav-modal__holo"></div>
+    <div class="nav-modal__header">
+      <img src="assets/logos/wordmark-white.svg" alt="Founding Creative" class="nav-modal__logo">
+      <button class="nav-modal__close" id="nav-close" aria-label="Close navigation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="nav-modal__links">
+      <a href="index.html#brand"      class="nav-modal__link" data-num="01">Brand</a>
+      <a href="index.html#color"      class="nav-modal__link" data-num="02">Color</a>
+      <a href="index.html#type"       class="nav-modal__link" data-num="03">Type</a>
+      <a href="index.html#spacing"    class="nav-modal__link" data-num="04">Spacing</a>
+      <a href="index.html#components" class="nav-modal__link" data-num="05">Components</a>
+      <a href="index.html#patterns"   class="nav-modal__link" data-num="06">Patterns</a>
+      <a href="how-to.html"           class="nav-modal__link" data-num="07" aria-current="page">How To</a>
+    </nav>
+    <div class="nav-modal__foot">
+      <span class="chip chip--mint chip--dot" style="font-size:11px;">v1.1 · Design System</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ Hero ══════════ -->
+<section class="hw-hero" id="main-content">
+  <div class="ds-inner">
+    <div class="hw-hero__label">How To</div>
+    <h1 class="hw-hero__title">Get the system<br>working <em>for you.</em></h1>
+    <p class="hw-hero__sub">Connect the Founding Creative design system to Claude, contribute updates as a developer, and understand how the live site stays current automatically.</p>
+  </div>
+</section>
+
+<!-- ══════════ 01 — Quick links ══════════ -->
+<section class="how-section" id="links">
+  <div class="ds-inner">
+    <div class="how-section__label">01 — Quick links</div>
+    <h2 class="how-section__title">Bookmark these.</h2>
+    <p class="how-section__intro">Two URLs — the source of truth and the live preview. Everything flows from here.</p>
+    <div class="link-cards">
+      <a href="https://github.com/foundingadmin/DesignSystem-Founding" class="link-card" target="_blank" rel="noopener">
+        <span class="link-card__label">GitHub Repository</span>
+        <span class="link-card__url">github.com/foundingadmin/DesignSystem-Founding</span>
+        <span class="link-card__desc">Source files, version history, branching, and pull requests.</span>
+      </a>
+      <a href="https://brand.foundingcreative.com" class="link-card" target="_blank" rel="noopener">
+        <span class="link-card__label">Live Preview</span>
+        <span class="link-card__url">brand.foundingcreative.com</span>
+        <span class="link-card__desc">The hosted reference — responsive across all devices, always reflects the latest merged version.</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 02 — Claude.ai ══════════ -->
+<section class="how-section" id="claude-ai">
+  <div class="ds-inner">
+    <div class="how-section__label">02 — Claude.ai · Claude Design</div>
+    <h2 class="how-section__title">Load it into Claude.</h2>
+    <p class="how-section__intro">Add the design system as project knowledge so Claude has full context of the visual language in every conversation — no pasting required.</p>
+    <ol class="step-list">
+      <li class="step">
+        <span class="step__num">01</span>
+        <div class="step__body">Open <strong>Claude.ai</strong> and navigate to <strong>Projects</strong>. Create a new project for Founding Creative work or open an existing one.</div>
+      </li>
+      <li class="step">
+        <span class="step__num">02</span>
+        <div class="step__body">Inside the project, open <strong>Project Knowledge</strong> and add the repository URL as a source:
+          <code class="code-block">https://github.com/foundingadmin/DesignSystem-Founding</code>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step__num">03</span>
+        <div class="step__body">Alternatively, upload the two core files directly as project knowledge — <strong>css/tokens.css</strong> and <strong>css/components.css</strong>. These contain every token, component class, and design convention.</div>
+      </li>
+      <li class="step">
+        <span class="step__num">04</span>
+        <div class="step__body">Done. Every conversation in that project now has the full design system as context — tokens, component patterns, brand conventions, and all.</div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════ 03 — Claude Code ══════════ -->
+<section class="how-section" id="claude-code">
+  <div class="ds-inner">
+    <div class="how-section__label">03 — Claude Code</div>
+    <h2 class="how-section__title">Reference it in any project.</h2>
+    <p class="how-section__intro">Claude Code can pull the design system in as context during any session, so it applies the correct tokens and components when helping you build.</p>
+    <ol class="step-list">
+      <li class="step">
+        <span class="step__num">01</span>
+        <div class="step__body">Open a terminal in any project directory and start a Claude Code session:
+          <code class="code-block">claude</code>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step__num">02</span>
+        <div class="step__body">Tell Claude to reference the design system:
+          <code class="code-block">Reference the Founding Creative design system at https://github.com/foundingadmin/DesignSystem-Founding</code>
+          Claude Code will pull in the repo for context and apply the correct tokens, component patterns, and brand conventions when building or reviewing code.
+        </div>
+      </li>
+      <li class="step">
+        <span class="step__num">03</span>
+        <div class="step__body"><strong>Working inside the repo itself?</strong> Open Claude Code from the design system directory and it picks up the codebase automatically — no extra steps needed.</div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════ 04 — Dev workflow ══════════ -->
+<section class="how-section" id="dev-workflow">
+  <div class="ds-inner">
+    <div class="how-section__label">04 — Dev workflow</div>
+    <h2 class="how-section__title">Edit, merge, done.</h2>
+    <p class="how-section__intro">All changes go through a branch and pull request. Merging to main is the only step — GitHub Pages deploys the live site automatically.</p>
+    <ol class="step-list">
+      <li class="step">
+        <span class="step__num">01</span>
+        <div class="step__body"><strong>Open Claude Code</strong> in the design system repo directory and describe what you want to change — a new component, a token update, a copy edit.</div>
+      </li>
+      <li class="step">
+        <span class="step__num">02</span>
+        <div class="step__body">Claude Code edits the relevant files — primarily <strong>css/tokens.css</strong> or <strong>css/components.css</strong> — and pushes to a new branch. It will not touch <strong>main</strong> directly.</div>
+      </li>
+      <li class="step">
+        <span class="step__num">03</span>
+        <div class="step__body">Open a pull request from your branch into main at <strong>github.com/foundingadmin/DesignSystem-Founding/pulls</strong>. Review the diff, confirm everything looks right.</div>
+      </li>
+      <li class="step">
+        <span class="step__num">04</span>
+        <div class="step__body"><strong>Merge.</strong> GitHub Pages detects the change to main and rebuilds the live site automatically. No deploy command, no build step, nothing extra to run.</div>
+      </li>
+    </ol>
+    <div class="callout">
+      <strong>Wait about 2–3 minutes after merging</strong>, then refresh <a href="https://brand.foundingcreative.com">brand.foundingcreative.com</a> to see your changes live. That's the entire deploy cycle.
+    </div>
+  </div>
+</section>
+
+<div class="ds-foot">
+  Founding Creative · Internal design system · v1.1 · April 2026
+</div>
+
+<script>
+(function () {
+  const toggle   = document.getElementById('nav-toggle');
+  const modal    = document.getElementById('nav-modal');
+  const closeBtn = document.getElementById('nav-close');
+  const backdrop = document.getElementById('nav-backdrop');
+
+  function openMenu() {
+    modal.classList.add('is-open');
+    toggle.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    modal.classList.remove('is-open');
+    toggle.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  toggle.addEventListener('click', () =>
+    modal.classList.contains('is-open') ? closeMenu() : openMenu()
+  );
+  closeBtn.addEventListener('click', closeMenu);
+  backdrop.addEventListener('click', closeMenu);
+  modal.querySelectorAll('.nav-modal__link').forEach(a =>
+    a.addEventListener('click', closeMenu)
+  );
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMenu();
+  });
+})();
+</script>
+</body>
+</html>
