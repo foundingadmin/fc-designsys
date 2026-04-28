@@ -360,7 +360,7 @@
   <div class="ds-inner">
     <div class="hw-hero__label">How To</div>
     <h1 class="hw-hero__title">Get the system<br>working <em>for you.</em></h1>
-    <p class="hw-hero__sub">Connect the Founding Creative design system to Claude, contribute updates as a developer, and understand how the live site stays current automatically.</p>
+    <p class="hw-hero__sub">Connect the design system to your tools — Claude Design, Claude Code, Cursor, Canva, and more. Or contribute updates as a developer.</p>
   </div>
 </section>
 
@@ -385,32 +385,32 @@
   </div>
 </section>
 
-<!-- ══════════ 02 — Claude.ai ══════════ -->
-<section class="how-section" id="claude-ai">
+<!-- ══════════ 02 — Claude Design ══════════ -->
+<section class="how-section" id="claude-design">
   <div class="ds-inner">
-    <div class="how-section__label">02 — Claude.ai · Claude Design</div>
-    <h2 class="how-section__title">Load it into Claude.</h2>
-    <p class="how-section__intro">Add the design system as project knowledge so Claude has full context of the visual language in every conversation — no pasting required.</p>
+    <div class="how-section__label">02 — Claude Design</div>
+    <h2 class="how-section__title">Claude Design</h2>
+    <p class="how-section__intro">Use the built-in skill to load the full design system — tokens, components, brand rules — fresh from the live repo at the start of every session.</p>
     <ol class="step-list">
       <li class="step">
         <span class="step__num">01</span>
-        <div class="step__body">Open <strong>Claude.ai</strong> and navigate to <strong>Projects</strong>. Create a new project for Founding Creative work or open an existing one.</div>
-      </li>
-      <li class="step">
-        <span class="step__num">02</span>
-        <div class="step__body">Inside the project, open <strong>Project Knowledge</strong> and add the repository URL as a source:
-          <code class="code-block">https://github.com/foundingadmin/DesignSystem-Founding</code>
+        <div class="step__body">Start a new <strong>Claude Design</strong> session (claude.ai), then invoke the skill:
+          <code class="code-block">/founding-creative-design</code>
+          Claude will immediately fetch the latest <strong>tokens.css</strong>, <strong>components.css</strong>, <strong>README.md</strong>, and <strong>CLAUDE.md</strong> directly from main — no stale snapshots, no manual imports.
         </div>
       </li>
       <li class="step">
-        <span class="step__num">03</span>
-        <div class="step__body">Alternatively, upload the two core files directly as project knowledge — <strong>css/tokens.css</strong> and <strong>css/components.css</strong>. These contain every token, component class, and design convention.</div>
+        <span class="step__num">02</span>
+        <div class="step__body">Start your request. Claude now knows the full palette, type scale, component classes, brand voice rules, and output conventions before it writes a single line.</div>
       </li>
       <li class="step">
-        <span class="step__num">04</span>
-        <div class="step__body">Done. Every conversation in that project now has the full design system as context — tokens, component patterns, brand conventions, and all.</div>
+        <span class="step__num">03</span>
+        <div class="step__body"><strong>Every new session, re-invoke the skill.</strong> It has no bundled snapshot — it always fetches live. If the repo has been updated since your last session, Claude automatically works from the newest version.</div>
       </li>
     </ol>
+    <div class="callout">
+      <strong>Alternatively</strong>, add the repo as permanent context via <strong>Projects → Project Knowledge</strong> in Claude.ai and paste in <code style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px;">https://github.com/foundingadmin/DesignSystem-Founding</code>. This loads the system automatically in every conversation within that project without needing to invoke the skill.
+    </div>
   </div>
 </section>
 
@@ -418,12 +418,12 @@
 <section class="how-section" id="claude-code">
   <div class="ds-inner">
     <div class="how-section__label">03 — Claude Code</div>
-    <h2 class="how-section__title">Reference it in any project.</h2>
-    <p class="how-section__intro">Claude Code can pull the design system in as context during any session, so it applies the correct tokens and components when helping you build.</p>
+    <h2 class="how-section__title">Claude Code</h2>
+    <p class="how-section__intro">The CLI for developers. Claude Code reads the design system from GitHub and applies correct tokens and components when building or reviewing code.</p>
     <ol class="step-list">
       <li class="step">
         <span class="step__num">01</span>
-        <div class="step__body">Open a terminal in any project directory and start a Claude Code session:
+        <div class="step__body">Open a terminal in any project directory and start a session:
           <code class="code-block">claude</code>
         </div>
       </li>
@@ -431,22 +431,77 @@
         <span class="step__num">02</span>
         <div class="step__body">Tell Claude to reference the design system:
           <code class="code-block">Reference the Founding Creative design system at https://github.com/foundingadmin/DesignSystem-Founding</code>
-          Claude Code will pull in the repo for context and apply the correct tokens, component patterns, and brand conventions when building or reviewing code.
+          Claude will pull in the repo for context and enforce the correct tokens, classes, and brand conventions in everything it writes.
         </div>
       </li>
       <li class="step">
         <span class="step__num">03</span>
-        <div class="step__body"><strong>Working inside the repo itself?</strong> Open Claude Code from the design system directory and it picks up the codebase automatically — no extra steps needed.</div>
+        <div class="step__body"><strong>Working inside the design system repo itself?</strong> Open Claude Code from that directory — it picks up the codebase automatically and no extra setup is needed.</div>
       </li>
     </ol>
   </div>
 </section>
 
-<!-- ══════════ 04 — Dev workflow ══════════ -->
+<!-- ══════════ 04 — Cursor, Bolt & vibe coding ══════════ -->
+<section class="how-section" id="vibe-coding">
+  <div class="ds-inner">
+    <div class="how-section__label">04 — Cursor · Bolt · Lovable · Replit & other AI builders</div>
+    <h2 class="how-section__title">Vibe coding apps</h2>
+    <p class="how-section__intro">Any AI-powered editor or builder can use the design system — just point it at the live files or paste the tokens directly into the project.</p>
+    <ol class="step-list">
+      <li class="step">
+        <span class="step__num">01</span>
+        <div class="step__body">In your tool's system prompt, rules file, or project context (e.g. <strong>.cursorrules</strong>, Bolt's system prompt, Lovable's brief), add:
+          <code class="code-block">Use the Founding Creative design system. Fetch tokens and components from:
+https://github.com/foundingadmin/DesignSystem-Founding
+Always use the CSS custom properties from tokens.css and class names from components.css.</code>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step__num">02</span>
+        <div class="step__body">For file-based tools like <strong>Cursor</strong> or <strong>Windsurf</strong>, copy <strong>css/tokens.css</strong> and <strong>css/components.css</strong> into your project and reference them in your stylesheet imports. The AI will have the full token set in its context automatically.</div>
+      </li>
+      <li class="step">
+        <span class="step__num">03</span>
+        <div class="step__body">Keep <a href="https://brand.foundingcreative.com" style="color: var(--mint);">brand.foundingcreative.com</a> open in a second tab as a visual reference while you vibe — components, spacing, and color swatches are all live on that page.</div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════ 05 — Canva ══════════ -->
+<section class="how-section" id="canva">
+  <div class="ds-inner">
+    <div class="how-section__label">05 — Canva</div>
+    <h2 class="how-section__title">Canva</h2>
+    <p class="how-section__intro">Load the brand palette and typefaces into your Canva Brand Kit so every template starts on-system, no manual color-picking required.</p>
+    <ol class="step-list">
+      <li class="step">
+        <span class="step__num">01</span>
+        <div class="step__body">In <strong>Canva → Brand Kit → Colors</strong>, add the core palette:<br><br>
+          <strong>Black</strong> — <code style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px; color: var(--mint);">#000000</code><br>
+          <strong>Mint</strong> — <code style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px; color: var(--mint);">#7EF893</code><br>
+          <strong>Ink</strong> — <code style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px; color: var(--mint);">#1C1C1E</code><br>
+          <strong>White</strong> — <code style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px; color: var(--mint);">#FFFFFF</code>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step__num">02</span>
+        <div class="step__body">In <strong>Brand Kit → Fonts</strong>, upload the Gelica OTF files from the repo's <strong>/fonts/</strong> folder and set <strong>Manrope</strong> (available in Canva's font library) as the body typeface.</div>
+      </li>
+      <li class="step">
+        <span class="step__num">03</span>
+        <div class="step__body">Use <a href="https://brand.foundingcreative.com" style="color: var(--mint);">brand.foundingcreative.com</a> as your visual reference for spacing, hierarchy, and component layouts while you design. The live page shows every pattern in context.</div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════ 06 — Dev workflow ══════════ -->
 <section class="how-section" id="dev-workflow">
   <div class="ds-inner">
-    <div class="how-section__label">04 — Dev workflow</div>
-    <h2 class="how-section__title">Edit, merge, done.</h2>
+    <div class="how-section__label">06 — Contributing</div>
+    <h2 class="how-section__title">Making changes</h2>
     <p class="how-section__intro">All changes go through a branch and pull request. Merging to main is the only step — GitHub Pages deploys the live site automatically.</p>
     <ol class="step-list">
       <li class="step">
