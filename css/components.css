@@ -3,6 +3,20 @@
    Depends on tokens.css
    ────────────────────────────────────────────────────────────── */
 
+/* ── Button glow ring — holographic conic animation ────────── */
+@property --holo-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes btn-holo-spin {
+  to { --holo-angle: 360deg; }
+}
+@keyframes holo-pulse {
+  0%, 100% { opacity: .75; filter: blur(10px) saturate(1.5) brightness(1);    }
+  50%      { opacity: 1;   filter: blur(18px) saturate(1.7) brightness(1.15); }
+}
+
 /* ── Buttons ───────────────────────────────────────────────── */
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
@@ -12,24 +26,47 @@
   border-radius: var(--r-full);
   border: 1px solid transparent;
   cursor: pointer;
+  position: relative; isolation: isolate;
   transition: transform .15s ease, background-color .2s ease, border-color .2s ease, color .2s ease;
   white-space: nowrap;
 }
 .btn:active { transform: translateY(1px); }
+
+/* Holographic glow ring — hidden by default, activated on hover.
+   Cycles through brand spectrum only (no white). border-radius: inherit
+   ensures the ring conforms to any button shape. */
+.btn::before {
+  content: "";
+  position: absolute; inset: -3px;
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--holo-angle),
+    #69EEFF, #6EFFB6, #C6A2FF, #FF6EC7, #6EFFB6, #69EEFF
+  );
+  opacity: 0;
+  filter: blur(12px) saturate(1.5) brightness(1.1);
+  transition: opacity .35s ease;
+  pointer-events: none;
+}
+.btn:hover::before {
+  opacity: 1;
+  animation: btn-holo-spin 4.5s linear infinite, holo-pulse 2s ease-in-out infinite;
+}
 
 .btn--primary {
   background: var(--mint);
   color: var(--n-black);
   border-color: var(--mint);
 }
-.btn--primary:hover { background: var(--mint-light); border-color: var(--mint-light); }
+.btn--primary:hover { background: var(--mint); border-color: var(--mint); }
 
 .btn--secondary {
   background: transparent;
   color: var(--text);
   border-color: var(--white-20);
 }
-.btn--secondary:hover { background: var(--white-10); border-color: var(--white-40); }
+.btn--secondary:hover { background: rgba(255,255,255,.06); border-color: var(--white-40); }
 
 .btn--link {
   background: transparent;
@@ -39,6 +76,7 @@
   border-bottom: 1px solid var(--white-20);
 }
 .btn--link:hover { border-bottom-color: var(--mint); color: var(--mint); }
+.btn--link::before { display: none; } /* link variant has no glow ring */
 
 .btn--small { padding: 6px 16px; font-size: 14px; }
 .btn .arrow { display: inline-block; transition: transform .2s ease; }
