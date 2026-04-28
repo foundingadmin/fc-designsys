@@ -4,9 +4,67 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Founding Creative — Design System</title>
+<meta name="description" content="Founding Creative's complete visual language — Gelica + Manrope typography, mint-and-holographic color tokens, spacing scale, and reusable components.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://brand.foundingcreative.com/">
+
+<!-- Favicon & manifest -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#000000">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://brand.foundingcreative.com/">
+<meta property="og:site_name" content="Founding Creative">
+<meta property="og:title" content="Founding Creative — Design System">
+<meta property="og:description" content="The single source of truth for Founding Creative's visual language. Color, type, spacing, and components — all in one place.">
+<meta property="og:image" content="https://brand.foundingcreative.com/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Founding Creative Design System preview card">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Founding Creative — Design System">
+<meta name="twitter:description" content="The single source of truth for Founding Creative's visual language. Color, type, spacing, and components — all in one place.">
+<meta name="twitter:image" content="https://brand.foundingcreative.com/assets/og-image.svg">
+<meta name="twitter:image:alt" content="Founding Creative Design System preview card">
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Founding Creative — Design System",
+  "description": "Founding Creative's complete visual language — typography, color tokens, spacing, and reusable components.",
+  "url": "https://brand.foundingcreative.com/",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Founding Creative Design System",
+    "url": "https://brand.foundingcreative.com/"
+  },
+  "about": {
+    "@type": "Organization",
+    "name": "Founding Creative",
+    "url": "https://foundingcreative.com"
+  }
+}
+</script>
+
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/components.css">
 <style>
+  /* Skip-to-content — visible only on keyboard focus */
+  .skip-link {
+    position: absolute; top: -9999px; left: 16px;
+    padding: 8px 16px; background: var(--mint); color: var(--n-black);
+    font-size: 14px; font-weight: 700; border-radius: 4px;
+    text-decoration: none; z-index: 9999;
+  }
+  .skip-link:focus { top: 16px; }
+
   /* Page shell */
   body { background: var(--n-black); }
   .ds-nav {
@@ -472,7 +530,8 @@
 <body>
 
 <!-- ══════════ Top nav ══════════ -->
-<nav class="ds-nav">
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav class="ds-nav" aria-label="Primary">
   <img class="ds-nav__logo" src="assets/logos/wordmark-white.svg" alt="Founding Creative">
   <span class="ds-nav__version chip chip--mint chip--dot" style="font-size:11px;">v1.1 · Design System</span>
   <div class="ds-nav__links">
@@ -514,7 +573,7 @@
 </div>
 
 <!-- ══════════ HERO ══════════ -->
-<section class="hero" id="top">
+<section class="hero" id="main-content">
   <div class="holo-bg">
     <div class="holo-bg__grad"></div>
     <div class="holo-bg__waves"></div>
