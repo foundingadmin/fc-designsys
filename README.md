@@ -10,7 +10,7 @@ A **living design system** built in plain HTML and CSS — no bundler, no packag
 
 - All design decisions are version-controlled and traceable
 - Token and component changes propagate to everyone automatically
-- The `founding-creative-design` Claude skill always fetches the latest directly from this repo
+- Any AI agent or tool can load the system fresh from `main` before doing creative work
 - The hosted reference at `brand.foundingcreative.com` updates on every merge to `main`
 
 ---
@@ -34,11 +34,22 @@ python3 -m http.server 8080
 
 ---
 
-## Using This System in Claude
+## Using This System in AI Agents and Tools
 
-The `founding-creative-design` skill in Claude fetches the live design system before any creative work. There is no snapshot — every session reads from `main` directly.
+To get consistent, on-brand output from any AI agent, coding tool, or generative workflow, point it at this repository before asking it to produce any visual work. The key files to load are:
 
-To use it, invoke the skill at the start of a Claude session. Claude will read the tokens, components, and guidelines fresh before generating any output.
+| File | What it gives the agent |
+|---|---|
+| `css/tokens.css` | Every colour, spacing, radius, and typography token |
+| `css/components.css` | All reusable component classes and their variants |
+| `index.html` | A live reference showing tokens and components in context |
+| `CLAUDE.md` | Conventions, naming rules, and patterns to follow |
+
+**The principle:** read these files fresh from `main` at the start of each session. Do not rely on a cached or bundled snapshot — the repo is the source of truth, and it changes.
+
+A prompt like this works well as a preamble in any tool that can fetch URLs or read files:
+
+> Before generating anything, read the Founding Creative design system from `github.com/foundingadmin/designsystem-foundingcreative` (branch: `main`). Load `css/tokens.css`, `css/components.css`, and `CLAUDE.md`. Use only the tokens and component classes defined there. Do not invent new colour values, font stacks, or spacing values.
 
 ---
 
