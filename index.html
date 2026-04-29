@@ -94,6 +94,62 @@
     padding: 120px 64px 64px;
     overflow: hidden;
   }
+  /* Shared branded gradient — used on hero, holo-stage, and pattern hero */
+  .holo-bg--branded .holo-bg__grad {
+    background: linear-gradient(-45deg, #1e1c72, #6b0474, #1d5c47, #0d3d8f);
+    background-size: 400% 400%;
+    animation: hero-gradient-shift 15s ease infinite;
+    filter: none;
+    inset: 0;
+  }
+  .holo-bg--branded .holo-bg__veil {
+    background: linear-gradient(180deg, rgba(0,4,7,0.5) 0%, rgba(0,4,7,1) 100%);
+  }
+  /* Wave overlay shared across branded sections */
+  .branded-wave {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 1;
+    opacity: 0.4;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Hero — exact gradient animation from foundingcreative.com */
+  .hero .holo-bg__grad {
+    background: linear-gradient(-45deg, #1e1c72, #6b0474, #1d5c47, #0d3d8f);
+    background-size: 400% 400%;
+    animation: hero-gradient-shift 15s ease infinite;
+    filter: none;
+    inset: 0;
+  }
+  @keyframes hero-gradient-shift {
+    0%   { background-position: 0%   50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0%   50%; }
+  }
+  /* Dark overlay — semi-dark at top, fully dark at bottom */
+  .hero .holo-bg__veil {
+    background: linear-gradient(180deg, rgba(0,4,7,0.5) 0%, rgba(0,4,7,1) 100%);
+  }
+  /* Black wave SVG — sits above gradient, below text */
+  .hero__wave {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 1;
+    opacity: 0.4;
+    mix-blend-mode: normal;
+    pointer-events: none;
+    user-select: none;
+  }
   .hero__title {
     position: relative; z-index: 2;
     font-family: var(--font-display); font-weight: 500;
@@ -581,10 +637,10 @@
 <section class="hero" id="main-content">
   <div class="holo-bg">
     <div class="holo-bg__grad"></div>
-    <div class="holo-bg__waves"></div>
     <div class="holo-bg__veil"></div>
     <div class="holo-bg__fade"></div>
   </div>
+  <img src="uploads/Founding-v1-Wave-black.svg" class="hero__wave" alt="" aria-hidden="true">
 
   <h1 class="hero__title">Creative <em>foundations</em> for brands of all sizes.</h1>
   <p class="hero__sub">A living system for web, brand, and design at Founding Creative — Gelica + Manrope, the mint-and-holographic palette, and the components that ship on foundingcreative.com.</p>
@@ -638,12 +694,12 @@
     <h3 style="margin-top: 80px; margin-bottom: 24px;">Holographic signature</h3>
     <p class="ds-section__intro" style="margin-bottom: 32px;">The animated conic gradient + wave overlay + black veil is Founding's most distinctive visual. Deploy it on marquee hero sections and rarely elsewhere — scarcity is the point.</p>
     <div class="holo-stage">
-      <div class="holo-bg">
+      <div class="holo-bg holo-bg--branded">
         <div class="holo-bg__grad"></div>
-        <div class="holo-bg__waves"></div>
         <div class="holo-bg__veil"></div>
         <div class="holo-bg__fade"></div>
       </div>
+      <img src="uploads/Founding-v1-Wave-black.svg" class="branded-wave" alt="" aria-hidden="true">
       <div class="holo-stage__content">
         <div class="holo-stage__eyebrow">Brand signature · Holo</div>
         <div class="holo-stage__title">We make things <em style="font-style:italic; color: var(--mint);">worth founding.</em></div>
@@ -1289,11 +1345,11 @@
     <!-- Marketing hero -->
     <div class="demo-label">Pattern · Hero</div>
     <div style="position: relative; border-radius: var(--r-2xl); overflow: hidden; border: 1px solid var(--white-10); min-height: 520px; display: flex; flex-direction: column; margin-bottom: 48px;">
-      <div class="holo-bg">
+      <div class="holo-bg holo-bg--branded">
         <div class="holo-bg__grad"></div>
-        <div class="holo-bg__waves"></div>
         <div class="holo-bg__veil"></div>
       </div>
+      <img src="uploads/Founding-v1-Wave-black.svg" class="branded-wave" alt="" aria-hidden="true">
       <nav class="navbar" style="position: relative; z-index: 2; background: transparent;">
         <div class="navbar__logo"><img src="assets/logos/wordmark-white.svg" alt="" style="height: 24px;"></div>
         <div class="navbar__nav">
