@@ -315,6 +315,38 @@
   .ds-callout a { color: var(--mint); }
   .usage-sub { margin-bottom: 64px; }
 
+  /* ── Imagery bento grid ──────────────────────────────── */
+  .bento-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 220px; gap: 12px; margin-bottom: 48px;
+  }
+  .bento-tile {
+    border-radius: var(--r-lg); overflow: hidden;
+    background: var(--n-ink); border: 1px solid var(--white-10);
+    position: relative;
+  }
+  .bento-tile img, .bento-tile video {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .bento-tile--w8 { grid-column: span 8; }
+  .bento-tile--w6 { grid-column: span 6; }
+  .bento-tile--w4 { grid-column: span 4; }
+  .bento-tile--h2 { grid-row: span 2; }
+
+  /* ── Social post grid ─────────────────────────────────── */
+  .social-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; margin-bottom: 48px;
+  }
+  .social-post {
+    border-radius: var(--r-xl); overflow: hidden;
+    background: var(--n-ink); border: 1px solid var(--white-10);
+    aspect-ratio: 4 / 5; position: relative;
+  }
+  .social-post img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+
   /* Scroll offset for fixed header */
   .hero, .ds-section { scroll-margin-top: 64px; }
 
@@ -330,6 +362,12 @@
     .scale-row { grid-template-columns: 100px 1fr 160px; gap: 16px; }
   }
   @media (max-width: 768px) {
+    .bento-grid { grid-template-columns: repeat(6, 1fr); grid-auto-rows: 160px; }
+    .bento-tile--w8 { grid-column: span 6; }
+    .bento-tile--w6 { grid-column: span 6; }
+    .bento-tile--w4 { grid-column: span 3; }
+    .social-grid { grid-template-columns: 1fr; }
+
     .ds-header__sub, .ds-header__pipe { display: none; }
     .ds-menu-btn { display: flex; }
 
@@ -410,6 +448,7 @@
       <a class="sidebar-item" href="#type" data-section="type"><i data-lucide="type"></i>Typography</a>
       <a class="sidebar-item" href="#spacing" data-section="spacing"><i data-lucide="ruler"></i>Spacing & Layout</a>
       <a class="sidebar-item" href="#iconography" data-section="iconography"><i data-lucide="shapes"></i>Iconography</a>
+      <a class="sidebar-item" href="#imagery" data-section="imagery"><i data-lucide="image-play"></i>Imagery</a>
       <div class="sidebar-divider"></div>
       <span class="sidebar-group-label">Components</span>
       <a class="sidebar-item" href="#comp-buttons" data-section="comp-buttons"><i data-lucide="square"></i>Buttons</a>
@@ -419,8 +458,10 @@
       <a class="sidebar-item" href="#comp-sitelaunch" data-section="comp-sitelaunch"><i data-lucide="layout-grid"></i>SiteLaunch</a>
       <a class="sidebar-item" href="#patterns" data-section="patterns"><i data-lucide="monitor"></i>Patterns</a>
       <div class="sidebar-divider"></div>
-      <span class="sidebar-group-label">Reference</span>
-      <a class="sidebar-item" href="#usage" data-section="usage"><i data-lucide="book-open"></i>Usage</a>
+      <span class="sidebar-group-label">Usage</span>
+      <a class="sidebar-item" href="#social" data-section="social"><i data-lucide="instagram"></i>Social Media</a>
+      <a class="sidebar-item" href="#ai-implementation" data-section="ai-implementation"><i data-lucide="book-open"></i>AI Implementation</a>
+      <div class="sidebar-divider"></div>
       <a class="sidebar-item" href="#changelog" data-section="changelog"><i data-lucide="history"></i>Changelog</a>
     </nav>
     <div class="sidebar-footer">
@@ -822,6 +863,65 @@
 
     <div style="padding: 20px 24px; background: var(--n-ink); border-left: 2px solid var(--mint); border-radius: 0 var(--r-md) var(--r-md) 0; font-size: 14px; line-height: 1.6; color: var(--text-dim);">
       <strong style="color: var(--white);">Using Lucide:</strong> Load via CDN — <code style="font-family:ui-monospace,monospace;font-size:12px;color:var(--mint);">&lt;script src="https://unpkg.com/lucide@latest"&gt;&lt;/script&gt;</code>, then use <code style="font-family:ui-monospace,monospace;font-size:12px;color:var(--mint);">&lt;i data-lucide="icon-name"&gt;&lt;/i&gt;</code> and call <code style="font-family:ui-monospace,monospace;font-size:12px;color:var(--mint);">lucide.createIcons()</code>. Full library at <a href="https://lucide.dev" target="_blank" rel="noopener" style="color:var(--mint);">lucide.dev</a>.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ IMAGERY ══════════ -->
+<section class="ds-section" id="imagery">
+  <div class="ds-inner">
+    <div class="ds-section__label">06 — Imagery</div>
+    <h2 class="ds-section__title">Visual language.</h2>
+    <p class="ds-section__intro">Dark, cinematic, and rendered with intent. Founding Creative's imagery pairs AI-generated visuals with real-world craft — moody subjects, dramatic lighting, and motion that feels just out of reach. Every image reinforces capability and precision, never decoration alone.</p>
+
+    <div class="bento-grid">
+      <div class="bento-tile bento-tile--w8 bento-tile--h2">
+        <img src="assets/styles/tituscreations_3D_beauty_product_renders_black_background_-a_39e79fc4-446f-4412-b411-f693c9116d3c_1.webp" alt="3D beauty product renders on black background" loading="lazy">
+      </div>
+      <div class="bento-tile bento-tile--w4 bento-tile--h2">
+        <img src="assets/styles/tituscreations_athena_standing_soticly_in_darkness_with_glowi_69106ab9-c1a7-4dfe-a360-7f38f006e245_0%20(1).png" alt="Athena figure standing in darkness with glow" loading="lazy">
+      </div>
+      <div class="bento-tile bento-tile--w4">
+        <img src="assets/styles/tituscreations_silhouette_of_a_web_developer_-ar_169_-profi_0e32a73a-6124-41fa-8e04-ab715dc33a12_2.webp" alt="Web developer silhouette" loading="lazy">
+      </div>
+      <div class="bento-tile bento-tile--w4">
+        <img src="assets/styles/tituscreations_I_need_blog_images_for_a_new_article_about_the_3395e425-3683-41c8-9e85-370dd8f60e15_2.gif" alt="Blog article imagery animation" loading="lazy">
+      </div>
+      <div class="bento-tile bento-tile--w4">
+        <img src="assets/styles/tituscreations_I_need_blog_images_for_a_new_article_about_the_9e0e27e0-c6dc-43c5-8405-dd7586559917_3.gif" alt="Blog article imagery animation" loading="lazy">
+      </div>
+      <div class="bento-tile bento-tile--w6">
+        <img src="assets/styles/website-UI.webp" alt="Website UI showcase" loading="lazy">
+      </div>
+      <div class="bento-tile bento-tile--w6">
+        <img src="assets/styles/ezgif-45789e82cd40f5.webp" alt="Animated brand visual" loading="lazy">
+      </div>
+      <div class="bento-tile bento-tile--w6">
+        <video autoplay loop muted playsinline>
+          <source src="assets/styles/tituscreations_a_frustrated_marketer_watching_a_spinning_load_494480f7-5513-41e2-8f32-a170957cd1ca_0.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="bento-tile bento-tile--w6">
+        <video autoplay loop muted playsinline>
+          <source src="assets/styles/tituscreations_skull_on_screen_of_website_on_phone_and_deskto_7c2dc8c4-9d73-4e4a-a122-ce761d4a3841_2.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: 24px;">Style principles</h3>
+    <div class="grid-3" style="margin-bottom: 48px;">
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label" style="color: var(--mint);">Dark &amp; Cinematic</div>
+        <p class="muted" style="font-size: 14px; margin-top: 12px; line-height: 1.6;">Subjects placed in near-shadow with precise accent lighting. Deep black as the base — no cluttered scenes, no stock-photo brightness. Drama comes from restraint.</p>
+      </div>
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label" style="color: var(--mint);">AI-Generated Craft</div>
+        <p class="muted" style="font-size: 14px; margin-top: 12px; line-height: 1.6;">Rendered with Midjourney using prompts tuned for cinematic quality, then selected for cohesion with the brand's premium aesthetic. Every frame is intentional.</p>
+      </div>
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label" style="color: var(--mint);">Motion &amp; Texture</div>
+        <p class="muted" style="font-size: 14px; margin-top: 12px; line-height: 1.6;">Short-form video and animated loops reinforce the brand's dynamic quality — used in hero positions and editorial contexts, never as background decoration.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -1274,10 +1374,50 @@
   </div>
 </section>
 
-<!-- ══════════ USAGE ══════════ -->
-<section class="ds-section" id="usage">
+<!-- ══════════ SOCIAL MEDIA ══════════ -->
+<section class="ds-section" id="social">
   <div class="ds-inner">
-    <div class="ds-section__label">Reference</div>
+    <div class="ds-section__label">Usage</div>
+    <h2 class="ds-section__title">Social media.</h2>
+    <p class="ds-section__intro">Founding Creative's social presence maintains the brand's dark, editorial tone — high-contrast visuals, tight typography, and a layout that reads well at thumb-scroll speed. Posts feel curated, not casual.</p>
+
+    <div class="social-grid">
+      <div class="social-post">
+        <img src="assets/styles/social%20post%20example%201.jpg" alt="Social post example 1" loading="lazy">
+      </div>
+      <div class="social-post" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 32px; text-align: center;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span style="font-size: 15px; font-weight: 600; color: var(--white);">Carousel Post</span>
+        <span style="font-size: 13px; color: var(--text-dim); line-height: 1.5;">Multi-slide format optimised for Instagram swipe-through</span>
+        <a href="assets/styles/social%20post%20example%202%20carousel.pdf" target="_blank" rel="noopener" style="font-size: 12px; color: var(--mint); text-decoration: none; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;">View PDF →</a>
+      </div>
+      <div class="social-post">
+        <img src="assets/styles/social%20post%20example%203.jpg" alt="Social post example 3" loading="lazy">
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: 24px;">The look</h3>
+    <div class="grid-3" style="margin-bottom: 48px;">
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label" style="color: var(--mint);">Composition</div>
+        <p class="muted" style="font-size: 14px; margin-top: 12px; line-height: 1.6;">Clean, grid-aligned layouts with generous space. Visual hierarchy mirrors the design system — one dominant element per frame, supporting copy beneath.</p>
+      </div>
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label" style="color: var(--mint);">Tone</div>
+        <p class="muted" style="font-size: 14px; margin-top: 12px; line-height: 1.6;">Confident and minimal. Copy is short, punchy, and written in sentence case. Captions elaborate — the visual carries the hook.</p>
+      </div>
+      <div style="padding: 32px; background: var(--n-ink); border: 1px solid var(--white-10); border-radius: var(--r-lg);">
+        <div class="demo-label" style="color: var(--mint);">Formats</div>
+        <p class="muted" style="font-size: 14px; margin-top: 12px; line-height: 1.6;">Primarily Instagram and LinkedIn. Square and portrait (1:1, 4:5) for feed posts; 9:16 for Stories and Reels. Carousel decks for deeper educational content.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ AI IMPLEMENTATION ══════════ -->
+<section class="ds-section" id="ai-implementation">
+  <div class="ds-inner">
+    <div class="ds-section__label">Usage</div>
     <h2 class="ds-section__title">Get it working.</h2>
     <p class="ds-section__intro">Connect BrandForge to your tools — Claude Design, Claude Code, Canva, and any AI builder. Everything flows from one source of truth.</p>
 
@@ -1394,7 +1534,6 @@ box-shadow: var(--glow-mint);
 <!-- ══════════ CHANGELOG ══════════ -->
 <section class="ds-section" id="changelog">
   <div class="ds-inner">
-    <div class="ds-section__label">Reference</div>
     <h2 class="ds-section__title">Changelog.</h2>
     <p class="ds-section__intro">Version history for BrandForge. Follow semantic versioning rules — patch for fixes, minor for new components or backwards-compatible additions, major for breaking changes.</p>
 
@@ -1485,9 +1624,9 @@ box-shadow: var(--glow-mint);
 
   // Active section tracking via IntersectionObserver
   const sectionIds = [
-    'brand', 'color', 'type', 'spacing', 'iconography',
+    'brand', 'color', 'type', 'spacing', 'iconography', 'imagery',
     'comp-buttons', 'comp-navbar', 'comp-chips', 'comp-cards', 'comp-sitelaunch',
-    'patterns', 'usage', 'changelog'
+    'patterns', 'social', 'ai-implementation', 'changelog'
   ];
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
