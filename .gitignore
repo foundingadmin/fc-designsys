@@ -1,0 +1,12 @@
+# Raw upload staging area — not for public distribution
+# Canonical assets live in assets/ and fonts/
+uploads/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Editor artifacts
+.vscode/
+*.swp
+*.swo
