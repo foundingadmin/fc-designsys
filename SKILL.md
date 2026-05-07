@@ -18,9 +18,10 @@ Read in this order:
 
 1. `README.md` — brand voice, visual rules, component patterns, do/don't
 2. `CLAUDE.md` — architecture notes, token conventions, branching workflow
-3. `css/tokens.css` — every design token as a CSS custom property
-4. `css/components.css` — all reusable component classes
-5. `index.html` — living reference showing tokens and components in use
+3. `DECK.md` — presentation design standard: canvas, fonts, type scale, colour, layouts, and component patterns for every Founding deck
+4. `css/tokens.css` — every design token as a CSS custom property
+5. `css/components.css` — all reusable component classes
+6. `index.html` — living reference showing tokens and components in use
 
 If any file has changed since a previous session, the fetched version is
 authoritative. Discard any prior knowledge of values that conflict.
@@ -81,3 +82,25 @@ This skill has no expiry and no bundled snapshot. Every session starts with
 a fresh fetch from `main`. If you are told the repo has been updated, re-read
 the affected files before continuing. The repository is the single source of
 truth — not this file, not any prior conversation.
+
+---
+
+## Usage
+
+### Decks
+
+`DECK.md` is the canonical specification for every Founding Creative presentation. It was extracted from the gold-standard BrandForge Gauntlet deck (May 2026) and covers canvas sizing, font stack, type scale, colour palette, layout patterns, and slide-component conventions. Any session generating a Founding deck must read `DECK.md` before writing a single line of HTML.
+
+**What it governs**
+- 16:9 canvas at 1280 × 720px logical size, responsive via `aspect-ratio: 16/9`
+- Font stack: Gelasio (display), Manrope (body/UI), Roboto Mono (code accent), loaded via Google Fonts CDN
+- Full type scale converted from PPT point sizes to HTML px at the 1280px canvas
+- Brand colour application: when to use `--mint`, holographic spectrum, deep anchors, and neutral greys
+- Named slide layouts (Title, Section Break, Two-Column, Full-Bleed Image, Stats, Timeline, etc.)
+- Reusable slide components: eyebrow labels, stat blocks, timeline rails, image frames, and the holographic gradient treatment
+
+**Relationship to the live deck**
+Each deck that ships should be logged in `studio.foundingcreative.com` as a project entry. That entry links to two things: the live deck URL and the raw `DECK.md` file on GitHub. This pairing makes `DECK.md` the master record — a team member opening the GTM deck entry sees both the rendered output and the specification that produced it. If the deck is regenerated or handed off to a new session, reading `DECK.md` is sufficient to reproduce the design intent exactly.
+
+**When to use**
+Use `DECK.md` (not the general brand guidelines alone) whenever the output is a slide deck, pitch, or presentation — whether built as a standalone HTML file, a Keynote export, or a PowerPoint. The general design tokens in `tokens.css` still apply for colour and spacing, but `DECK.md` overrides or extends them wherever presentation-specific conventions differ.
