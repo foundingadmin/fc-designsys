@@ -461,7 +461,6 @@
       <span class="sidebar-group-label">Usage</span>
       <a class="sidebar-item" href="#social" data-section="social"><i data-lucide="instagram"></i>Social Media</a>
       <a class="sidebar-item" href="#ai-implementation" data-section="ai-implementation"><i data-lucide="book-open"></i>AI Implementation</a>
-      <a class="sidebar-item" href="#decks" data-section="decks"><i data-lucide="presentation"></i>Decks</a>
       <div class="sidebar-divider"></div>
       <a class="sidebar-item" href="#changelog" data-section="changelog"><i data-lucide="history"></i>Changelog</a>
     </nav>
@@ -1536,63 +1535,6 @@ box-shadow: var(--glow-mint);
   </div>
 </section>
 
-<!-- ══════════ DECKS ══════════ -->
-<section class="ds-section" id="decks">
-  <div class="ds-inner">
-    <div class="ds-section__label">Usage</div>
-    <h2 class="ds-section__title">Build a deck.</h2>
-    <p class="ds-section__intro">Every Founding presentation is generated from a single specification — <strong>DECK.md</strong>. It lives in this repo alongside <strong>CLAUDE.md</strong> and covers everything an AI session needs: canvas size, font stack, type scale, colour rules, named layouts, and slide components. Any tool that can read a GitHub file can build a fully on-brand deck from scratch.</p>
-
-    <!-- Quick links -->
-    <div class="usage-sub">
-      <h3 style="margin-bottom: 16px;">Quick links</h3>
-      <div class="link-cards">
-        <a href="https://github.com/foundingadmin/DesignSystem-Founding/blob/main/DECK.md" class="link-card" target="_blank" rel="noopener">
-          <span class="link-card__label">Deck Specification</span>
-          <span class="link-card__url">DECK.md on GitHub</span>
-          <span class="link-card__desc">The master record — canvas, fonts, type scale, colour, layouts, and every slide component pattern.</span>
-        </a>
-        <a href="https://studio.foundingcreative.com/" class="link-card" target="_blank" rel="noopener">
-          <span class="link-card__label">All Decks</span>
-          <span class="link-card__url">studio.foundingcreative.com</span>
-          <span class="link-card__desc">Every live deck with its source spec alongside it — the master record for each presentation.</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- How it works -->
-    <div class="usage-sub">
-      <h3 style="margin-bottom: 8px;">How it works</h3>
-      <p class="ds-section__intro" style="margin-bottom: 24px; font-size: 17px;"><strong>DECK.md</strong> is automatically fetched by the <strong>founding-creative-design</strong> skill — the same skill that loads the brand tokens and components. You don't pass DECK.md manually; the skill pulls it in Step 1 alongside CLAUDE.md. Once loaded, every slide the AI generates is grounded in the correct canvas dimensions, typefaces, type scale, colour logic, and layout patterns.</p>
-    </div>
-
-    <!-- Claude Code -->
-    <div class="usage-sub">
-      <h3 style="margin-bottom: 8px;">Generate a deck with Claude Code</h3>
-      <p class="ds-section__intro" style="margin-bottom: 24px; font-size: 17px;">The fastest way to produce a new deck. Claude Code reads DECK.md, builds the HTML file, and saves it ready to open in a browser.</p>
-      <ol class="step-list">
-        <li class="step"><span class="step__num">01</span><div class="step__body">Open Claude Code in any directory and invoke the skill:<code class="code-block">/founding-creative-design</code>The skill fetches README.md, CLAUDE.md, DECK.md, tokens.css, components.css, and index.html from main before doing anything else.</div></li>
-        <li class="step"><span class="step__num">02</span><div class="step__body">Describe the deck you need — its purpose, audience, number of slides, and any content:<code class="code-block">Build a 10-slide GTM pitch deck for a SaaS product launch. Audience is VCs. Include a title slide, problem, solution, market size, product demo, traction, team, roadmap, pricing, and a closing CTA.</code></div></li>
-        <li class="step"><span class="step__num">03</span><div class="step__body">Claude Code outputs a single self-contained HTML file. Open it in a browser — click or press the arrow keys to advance slides. No build step, no dependencies.</div></li>
-        <li class="step"><span class="step__num">04</span><div class="step__body">Log the finished deck in <a href="https://studio.foundingcreative.com/" style="color: var(--mint);" target="_blank" rel="noopener">studio.foundingcreative.com</a> — link both the live deck URL and the raw DECK.md file on GitHub so the full record is in one place.</div></li>
-      </ol>
-    </div>
-
-    <!-- Claude Design -->
-    <div class="usage-sub">
-      <h3 style="margin-bottom: 8px;">Generate a deck with Claude Design</h3>
-      <p class="ds-section__intro" style="margin-bottom: 24px; font-size: 17px;">Claude Design works the same way — the repo connection means DECK.md is already part of its context once you've linked the GitHub repo.</p>
-      <ol class="step-list">
-        <li class="step"><span class="step__num">01</span><div class="step__body">Open Claude Design and confirm the repo is connected (<strong>github.com/foundingadmin/DesignSystem-Founding</strong>). If not, reconnect — this pulls in DECK.md along with all other system files.</div></li>
-        <li class="step"><span class="step__num">02</span><div class="step__body">Describe the deck in the prompt, referencing DECK.md by name so Claude Design knows to apply presentation-specific rules rather than general brand guidelines:<code class="code-block">Using DECK.md, build a 6-slide agency credentials deck. Slides: cover, services overview, case study, process, team, contact.</code></div></li>
-        <li class="step"><span class="step__num">03</span><div class="step__body">Export the result as an HTML file and add it to the studio record.</div></li>
-      </ol>
-    </div>
-
-    <div class="ds-callout"><strong>One spec, every deck.</strong> DECK.md is extracted from the gold-standard BrandForge Gauntlet PPT (May 2026). When the visual language of presentations evolves, update DECK.md — every future AI-generated deck inherits the change automatically.</div>
-  </div>
-</section>
-
 <!-- ══════════ CHANGELOG ══════════ -->
 <section class="ds-section" id="changelog">
   <div class="ds-inner">
@@ -1688,7 +1630,7 @@ box-shadow: var(--glow-mint);
   const sectionIds = [
     'brand', 'color', 'type', 'spacing', 'iconography', 'imagery',
     'comp-buttons', 'comp-navbar', 'comp-chips', 'comp-cards', 'comp-sitelaunch',
-    'patterns', 'social', 'ai-implementation', 'decks', 'changelog'
+    'patterns', 'social', 'ai-implementation', 'changelog'
   ];
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
