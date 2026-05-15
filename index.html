@@ -94,11 +94,88 @@
   .grid-6  { display: grid; grid-template-columns: repeat(6, 1fr);  gap: 16px; }
 
   /* Color swatches */
-  .swatch { border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--white-10); }
+  .swatch { border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--white-10); transition: border-color 0.2s ease; }
+  .swatch:hover { border-color: var(--white-20); }
   .swatch__chip { aspect-ratio: 16 / 10; }
-  .swatch__meta { padding: 16px; background: var(--n-ink); display: flex; justify-content: space-between; align-items: baseline; }
-  .swatch__name { font-size: 15px; font-weight: 600; }
-  .swatch__hex  { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 12px; color: var(--text-dim); letter-spacing: 0.02em; }
+  .swatch__meta { padding: 16px; background: var(--n-ink); display: flex; flex-direction: column; gap: 6px; }
+  .swatch__header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .swatch__name { font-size: 14px; font-weight: 600; }
+  .swatch__copy {
+    font-family: ui-monospace, SFMono-Regular, monospace; font-size: 11px; font-weight: 600;
+    padding: 3px 12px; border-radius: var(--r-full);
+    background: rgba(255,255,255,0.07); color: var(--text-dim);
+    border: 1px solid var(--white-10); cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap; flex-shrink: 0; letter-spacing: 0.04em;
+  }
+  .swatch__copy:hover { background: rgba(255,255,255,0.14); color: var(--white); border-color: var(--white-20); }
+  .swatch__copy.copied { background: rgba(126,248,147,0.12); color: var(--mint); border-color: rgba(126,248,147,0.3); }
+  .swatch__codes { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .swatch__hex  { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 12px; color: var(--white); letter-spacing: 0.02em; font-weight: 600; }
+  .swatch__rgb  { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 11px; color: var(--text-dim); }
+  .swatch__cmyk { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 11px; color: var(--text-dim); }
+  .swatch__usage { font-size: 12px; color: var(--text-dim); line-height: 1.4; margin-top: 2px; }
+
+  /* Templates section */
+  .template-sub { margin-bottom: 56px; }
+  .template-sub__label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 20px; }
+  .template-row {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 32px; align-items: start;
+    padding: 28px 32px; background: var(--n-ink);
+    border: 1px solid var(--white-10); border-radius: var(--r-lg);
+    margin-bottom: 12px; transition: border-color 0.2s ease;
+  }
+  .template-row:hover { border-color: var(--white-20); }
+  .template-row__body { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .template-row__title { font-size: 16px; font-weight: 600; color: var(--white); }
+  .template-row__desc { font-size: 14px; color: var(--text-dim); line-height: 1.55; }
+  .template-row__previews { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+  .template-row__img {
+    height: 120px; border-radius: var(--r-md); object-fit: cover;
+    border: 1px solid var(--white-10); background: var(--n-black); flex-shrink: 0;
+  }
+  .template-row__img--wide { height: 90px; width: 100%; max-width: 520px; object-fit: cover; }
+  .template-row__img--portrait { height: 120px; width: auto; aspect-ratio: 1/1; }
+  .template-row__actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; padding-top: 2px; }
+  .template-row__meta { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 11px; color: var(--text-dim); text-align: right; }
+  .btn--download {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: var(--r-full);
+    background: rgba(255,255,255,0.07); color: var(--white);
+    border: 1px solid var(--white-20); font-size: 13px; font-weight: 600;
+    text-decoration: none; white-space: nowrap;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn--download:hover { background: rgba(255,255,255,0.12); border-color: var(--white-30, rgba(255,255,255,0.3)); }
+
+  /* Palette action bar */
+  .palette-bar {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    padding: 16px 20px; background: var(--n-ink);
+    border: 1px solid var(--white-10); border-radius: var(--r-lg);
+    margin-bottom: 40px;
+  }
+  .palette-bar__label { font-size: 12px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-dim); flex-shrink: 0; }
+  .palette-bar__spacer { flex: 1; }
+
+  /* Font download bar */
+  .font-dl-bar {
+    border-top: 1px solid var(--white-10); padding-top: 32px; margin-top: 16px;
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  }
+
+  /* Email signature preview */
+  .sig-preview {
+    background: #f5f5f5; border-radius: var(--r-md); padding: 24px 28px;
+    border: 1px solid rgba(0,0,0,0.08); margin-top: 16px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  .sig-preview__name { font-size: 15px; font-weight: 700; color: #0a0a0a; margin: 0 0 3px; letter-spacing: -0.01em; }
+  .sig-preview__title { font-size: 12px; color: #666; margin: 0 0 12px; }
+  .sig-preview__links { font-size: 12px; color: #888; margin: 0; line-height: 1.8; }
+  .sig-preview__links a { color: #3db355; font-weight: 600; text-decoration: none; }
+  .sig-preview__sep { color: #ccc; margin: 0 5px; }
 
   /* Scale row */
   .scale-row { display: grid; grid-template-columns: 120px 1fr 200px; gap: 32px; align-items: baseline; padding: 32px 0; border-top: 1px solid var(--white-10); }
@@ -141,6 +218,56 @@
   }
   .logo-cell--mint .logo-cell__label { color: rgba(0,0,0,0.6); }
   .logo-cell img { width: 50%; max-width: 200px; }
+  .logo-dl-bar {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 20px 0 32px; align-items: center;
+  }
+  .logo-dl-bar__label { font-size: 12px; color: var(--text-dim); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 4px; flex-shrink: 0; }
+  .logo-dl-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px; border-radius: var(--r-full);
+    background: rgba(255,255,255,0.06); color: var(--text-dim);
+    border: 1px solid var(--white-10); font-size: 12px; font-weight: 600;
+    text-decoration: none; transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+  }
+  .logo-dl-chip:hover { background: rgba(255,255,255,0.11); color: var(--white); border-color: var(--white-20); }
+  .logo-dl-chip svg { flex-shrink: 0; }
+  .logo-dl-all {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 18px; border-radius: var(--r-full);
+    background: rgba(126,248,147,0.1); color: var(--mint);
+    border: 1px solid rgba(126,248,147,0.25); font-size: 13px; font-weight: 600;
+    text-decoration: none; margin-left: auto; flex-shrink: 0;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+  }
+  .logo-dl-all:hover { background: rgba(126,248,147,0.17); border-color: rgba(126,248,147,0.4); }
+
+  /* Logo cell format buttons (AI / SVG / PNG) */
+  .logo-cell__actions {
+    position: absolute; bottom: 10px; right: 10px;
+    display: flex; gap: 4px; z-index: 3;
+  }
+  .logo-format-btn {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
+    padding: 3px 8px; border-radius: var(--r-xs);
+    background: rgba(0,0,0,0.58); color: rgba(255,255,255,0.88);
+    border: 1px solid rgba(255,255,255,0.18); cursor: pointer;
+    text-decoration: none; backdrop-filter: blur(6px);
+    transition: background 0.12s ease;
+  }
+  .logo-format-btn:hover { background: rgba(0,0,0,0.82); color: #fff; }
+  .logo-cell--mint .logo-format-btn,
+  .logo-cell--holo .logo-format-btn {
+    background: rgba(255,255,255,0.58); color: rgba(0,0,0,0.88);
+    border-color: rgba(0,0,0,0.14);
+  }
+  .logo-cell--mint .logo-format-btn:hover,
+  .logo-cell--holo .logo-format-btn:hover {
+    background: rgba(255,255,255,0.85); color: #000;
+  }
 
   /* Holo tile */
   .holo-stage { position: relative; border-radius: var(--r-2xl); overflow: hidden; aspect-ratio: 16 / 7; background: var(--n-black); }
@@ -459,7 +586,8 @@
       <a class="sidebar-item" href="#patterns" data-section="patterns"><i data-lucide="monitor"></i>Patterns</a>
       <div class="sidebar-divider"></div>
       <span class="sidebar-group-label">Usage</span>
-      <a class="sidebar-item" href="#social" data-section="social"><i data-lucide="instagram"></i>Social Media</a>
+      <a class="sidebar-item" href="#templates" data-section="templates"><i data-lucide="folder-open"></i>Templates</a>
+      <a class="sidebar-item" href="#social" data-section="social"><i data-lucide="share-2"></i>Social Media</a>
       <a class="sidebar-item" href="#ai-implementation" data-section="ai-implementation"><i data-lucide="book-open"></i>AI Implementation</a>
       <div class="sidebar-divider"></div>
       <a class="sidebar-item" href="#changelog" data-section="changelog"><i data-lucide="history"></i>Changelog</a>
@@ -482,12 +610,10 @@
     <div class="holo-bg__veil"></div>
     <div class="holo-bg__fade"></div>
   </div>
-  <img src="assets/logos/wave-black.svg" class="hero__wave" alt="" aria-hidden="true">
-
   <h1 class="hero__title">Creative <em>foundations</em> for brands of all sizes.</h1>
   <p class="hero__sub">A living system for web, brand, and design at Founding Creative — Gelica + Manrope, the mint-and-holographic palette, and the components that ship on foundingcreative.com.</p>
   <div class="hero__meta">
-    <div><strong>Version</strong>v1.2 · May 2026</div>
+    <div><strong>Version</strong>v1.3 · May 2026</div>
     <div><strong>Source</strong>Figma · foundingcreative.com</div>
     <div><strong>Stewards</strong>Tyler, Jamie, Sasha</div>
     <div><strong>License</strong>Internal · Founding Creative</div>
@@ -501,34 +627,76 @@
     <h2 class="ds-section__title">The marks.</h2>
     <p class="ds-section__intro">Four expressions of one identity. The <strong>wordmark</strong> leads in navigation and signatures. The <strong>brandmark</strong> pairs icon + wordmark for hero lockups. The <strong>icon</strong> goes anywhere square: favicons, avatars, app tiles. The <strong>wave</strong> is a textural signature — use it large, behind, and cropped.</p>
 
+    <div style="display:flex; justify-content:flex-end; margin-bottom: 12px;">
+      <a href="#" class="logo-dl-all">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download all marks (SVG)
+      </a>
+    </div>
+
     <div class="logo-grid" style="margin-bottom: 32px;">
       <div class="logo-cell logo-cell--dark">
         <span class="logo-cell__label">Wordmark · White</span>
         <img src="assets/logos/wordmark-white.svg" alt="">
+        <div class="logo-cell__actions">
+          <a href="#" class="logo-format-btn">AI</a>
+          <a href="assets/logos/wordmark-white.svg" download="FC-wordmark-white.svg" class="logo-format-btn">SVG</a>
+          <a href="#" class="logo-format-btn">PNG</a>
+        </div>
       </div>
       <div class="logo-cell logo-cell--mint">
         <span class="logo-cell__label">Wordmark · Black</span>
         <img src="assets/logos/wordmark-black.svg" alt="">
+        <div class="logo-cell__actions">
+          <a href="#" class="logo-format-btn">AI</a>
+          <a href="assets/logos/wordmark-black.svg" download="FC-wordmark-black.svg" class="logo-format-btn">SVG</a>
+          <a href="#" class="logo-format-btn">PNG</a>
+        </div>
       </div>
       <div class="logo-cell logo-cell--ink">
         <span class="logo-cell__label">Brandmark · White</span>
         <img src="assets/logos/brandmark-white.svg" alt="" style="width: 30%;">
+        <div class="logo-cell__actions">
+          <a href="#" class="logo-format-btn">AI</a>
+          <a href="assets/logos/brandmark-white.svg" download="FC-brandmark-white.svg" class="logo-format-btn">SVG</a>
+          <a href="#" class="logo-format-btn">PNG</a>
+        </div>
       </div>
       <div class="logo-cell logo-cell--holo">
         <span class="logo-cell__label">Brandmark · Black</span>
         <img src="assets/logos/brandmark-black.svg" alt="" style="width: 30%;">
+        <div class="logo-cell__actions">
+          <a href="#" class="logo-format-btn">AI</a>
+          <a href="assets/logos/brandmark-black.svg" download="FC-brandmark-black.svg" class="logo-format-btn">SVG</a>
+          <a href="#" class="logo-format-btn">PNG</a>
+        </div>
       </div>
       <div class="logo-cell logo-cell--dark">
         <span class="logo-cell__label">Icon · White</span>
         <img src="assets/logos/icon-white.svg" alt="" style="width: 40%;">
+        <div class="logo-cell__actions">
+          <a href="#" class="logo-format-btn">AI</a>
+          <a href="assets/logos/icon-white.svg" download="FC-icon-white.svg" class="logo-format-btn">SVG</a>
+          <a href="#" class="logo-format-btn">PNG</a>
+        </div>
       </div>
       <div class="logo-cell logo-cell--mint">
         <span class="logo-cell__label">Icon · Black</span>
         <img src="assets/logos/icon-black.svg" alt="" style="width: 40%;">
+        <div class="logo-cell__actions">
+          <a href="#" class="logo-format-btn">AI</a>
+          <a href="assets/logos/icon-black.svg" download="FC-icon-black.svg" class="logo-format-btn">SVG</a>
+          <a href="#" class="logo-format-btn">PNG</a>
+        </div>
       </div>
       <div class="logo-cell logo-cell--ink" style="grid-column: span 2;">
         <span class="logo-cell__label">Wave · Textural signature</span>
         <img src="assets/logos/wave-white.svg" alt="" style="width: 90%; max-width: none;">
+        <div class="logo-cell__actions">
+          <a href="#" class="logo-format-btn">AI</a>
+          <a href="assets/logos/wave-white.svg" download="FC-wave-white.svg" class="logo-format-btn">SVG</a>
+          <a href="#" class="logo-format-btn">PNG</a>
+        </div>
       </div>
     </div>
 
@@ -542,7 +710,6 @@
         <div class="holo-bg__veil"></div>
         <div class="holo-bg__fade"></div>
       </div>
-      <img src="assets/logos/wave-black.svg" class="branded-wave" alt="" aria-hidden="true">
       <div class="holo-stage__content">
         <div class="holo-stage__eyebrow">Brand signature · Holo</div>
         <div class="holo-stage__title">We make things <em style="font-style:italic; color: var(--mint);">worth founding.</em></div>
@@ -557,27 +724,45 @@
         <div style="background: #0A0A0A; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; padding: 32px;">
           <img src="assets/flag-black.gif" alt="Flag — dark bg" style="filter: invert(1); max-width: 80%; max-height: 100%;">
         </div>
-        <div style="padding: 12px 16px; background: var(--n-ink); display: flex; justify-content: space-between; align-items: baseline;">
-          <span style="font-size: 13px; font-weight: 600;">Dark · #0A0A0A</span>
-          <span style="font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-dim);">filter: invert(1) · 19.6:1</span>
+        <div style="padding: 10px 16px; background: var(--n-ink); display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+          <div>
+            <span style="font-size: 13px; font-weight: 600;">Dark · #0A0A0A</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-dim); margin-left: 10px;">filter: invert(1) · 19.6:1</span>
+          </div>
+          <a href="assets/flag-black.gif" download="FC-flag-black.gif" class="logo-dl-chip" style="font-size: 11px; padding: 4px 10px;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download GIF
+          </a>
         </div>
       </div>
       <div style="border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--white-10);">
         <div style="background: #5A5A5E; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; padding: 32px;">
           <img src="assets/flag-black.gif" alt="Flag — medium bg" style="max-width: 80%; max-height: 100%;">
         </div>
-        <div style="padding: 12px 16px; background: var(--n-ink); display: flex; justify-content: space-between; align-items: baseline;">
-          <span style="font-size: 13px; font-weight: 600;">Medium · #5A5A5E</span>
-          <span style="font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-dim);">native black · 4.7:1 AA</span>
+        <div style="padding: 10px 16px; background: var(--n-ink); display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+          <div>
+            <span style="font-size: 13px; font-weight: 600;">Medium · #5A5A5E</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-dim); margin-left: 10px;">native black · 4.7:1 AA</span>
+          </div>
+          <a href="assets/flag-black.gif" download="FC-flag-black.gif" class="logo-dl-chip" style="font-size: 11px; padding: 4px 10px;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download GIF
+          </a>
         </div>
       </div>
       <div style="border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--white-10);">
         <div style="background: #ECEEF2; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; padding: 32px;">
           <img src="assets/flag-black.gif" alt="Flag — light bg" style="max-width: 80%; max-height: 100%;">
         </div>
-        <div style="padding: 12px 16px; background: var(--n-ink); display: flex; justify-content: space-between; align-items: baseline;">
-          <span style="font-size: 13px; font-weight: 600;">Light · #ECEEF2</span>
-          <span style="font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-dim);">native black · 16.1:1</span>
+        <div style="padding: 10px 16px; background: var(--n-ink); display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+          <div>
+            <span style="font-size: 13px; font-weight: 600;">Light · #ECEEF2</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-dim); margin-left: 10px;">native black · 16.1:1</span>
+          </div>
+          <a href="assets/flag-grey.gif" download="FC-flag-grey.gif" class="logo-dl-chip" style="font-size: 11px; padding: 4px 10px;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download GIF
+          </a>
         </div>
       </div>
     </div>
@@ -607,43 +792,56 @@
     <h2 class="ds-section__title">Deep black. Mint&nbsp;green.<br>One prismatic spectrum.</h2>
     <p class="ds-section__intro">The system lives on a black-first canvas. <strong>Mint Green #7EF893</strong> is the single accent — it's what "points at things." The holographic spectrum (cyan, mint, lavender) only appears on hero backgrounds and inside SiteLaunch cards, never as general UI color.</p>
 
+    <div class="palette-bar">
+      <span class="palette-bar__label">Palette</span>
+      <button id="copy-all-hex-btn" class="swatch__copy" style="font-size: 12px; padding: 5px 14px;" onclick="copyAllHex()">Copy all hex codes</button>
+      <a href="#" class="logo-dl-chip">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download ASE palette
+      </a>
+      <a href="#" class="logo-dl-chip">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download CLR (macOS)
+      </a>
+    </div>
+
     <h3 style="margin-bottom: 24px;">Neutrals</h3>
     <div class="grid-4" style="margin-bottom: 64px;">
-      <div class="swatch"><div class="swatch__chip" style="background:#F2F2F2"></div><div class="swatch__meta"><span class="swatch__name">Neutral Lightest</span><span class="swatch__hex">#F2F2F2</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#D8D8D8"></div><div class="swatch__meta"><span class="swatch__name">Neutral Lighter</span><span class="swatch__hex">#D8D8D8</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#B2B2B2"></div><div class="swatch__meta"><span class="swatch__name">Neutral Light</span><span class="swatch__hex">#B2B2B2</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#7F7F7F"></div><div class="swatch__meta"><span class="swatch__name">Neutral</span><span class="swatch__hex">#7F7F7F</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#4C4C4C"></div><div class="swatch__meta"><span class="swatch__name">Neutral Dark</span><span class="swatch__hex">#4C4C4C</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#252424"></div><div class="swatch__meta"><span class="swatch__name">Neutral Darker</span><span class="swatch__hex">#252424</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#1C1C1E"></div><div class="swatch__meta"><span class="swatch__name">Ink (surface)</span><span class="swatch__hex">#1C1C1E</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#000000;border-right:1px solid var(--white-10)"></div><div class="swatch__meta"><span class="swatch__name">Black</span><span class="swatch__hex">#000000</span></div></div>
+      <div class="swatch" data-hex="#F2F2F2"><div class="swatch__chip" style="background:#F2F2F2"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Neutral Lightest</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#F2F2F2</span><span class="swatch__rgb">242, 242, 242</span></div><div class="swatch__cmyk">CMYK 0, 0, 0, 5</div><div class="swatch__usage">Light backgrounds, print surfaces</div></div></div>
+      <div class="swatch" data-hex="#D8D8D8"><div class="swatch__chip" style="background:#D8D8D8"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Neutral Lighter</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#D8D8D8</span><span class="swatch__rgb">216, 216, 216</span></div><div class="swatch__cmyk">CMYK 0, 0, 0, 15</div><div class="swatch__usage">Subtle borders, disabled states</div></div></div>
+      <div class="swatch" data-hex="#B2B2B2"><div class="swatch__chip" style="background:#B2B2B2"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Neutral Light</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#B2B2B2</span><span class="swatch__rgb">178, 178, 178</span></div><div class="swatch__cmyk">CMYK 0, 0, 0, 30</div><div class="swatch__usage">Placeholder text, secondary borders</div></div></div>
+      <div class="swatch" data-hex="#7F7F7F"><div class="swatch__chip" style="background:#7F7F7F"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Neutral</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#7F7F7F</span><span class="swatch__rgb">127, 127, 127</span></div><div class="swatch__cmyk">CMYK 0, 0, 0, 50</div><div class="swatch__usage">Subdued text, muted UI elements</div></div></div>
+      <div class="swatch" data-hex="#4C4C4C"><div class="swatch__chip" style="background:#4C4C4C"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Neutral Dark</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#4C4C4C</span><span class="swatch__rgb">76, 76, 76</span></div><div class="swatch__cmyk">CMYK 0, 0, 0, 70</div><div class="swatch__usage">Secondary text on light surfaces</div></div></div>
+      <div class="swatch" data-hex="#252424"><div class="swatch__chip" style="background:#252424"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Neutral Darker</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#252424</span><span class="swatch__rgb">37, 36, 36</span></div><div class="swatch__cmyk">CMYK 0, 3, 3, 85</div><div class="swatch__usage">Near-black surfaces, deep UI</div></div></div>
+      <div class="swatch" data-hex="#1C1C1E"><div class="swatch__chip" style="background:#1C1C1E"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Ink (surface)</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#1C1C1E</span><span class="swatch__rgb">28, 28, 30</span></div><div class="swatch__cmyk">CMYK 7, 7, 0, 88</div><div class="swatch__usage">Card backgrounds, elevated surfaces</div></div></div>
+      <div class="swatch" data-hex="#000000"><div class="swatch__chip" style="background:#000000;border-right:1px solid var(--white-10)"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Black</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#000000</span><span class="swatch__rgb">0, 0, 0</span></div><div class="swatch__cmyk">CMYK 0, 0, 0, 100</div><div class="swatch__usage">Primary background, primary text</div></div></div>
     </div>
 
     <h3 style="margin-bottom: 24px;">Mint Green — primary accent</h3>
     <div class="grid-6" style="margin-bottom: 64px;">
-      <div class="swatch"><div class="swatch__chip" style="background:#E5FDE9"></div><div class="swatch__meta"><span class="swatch__name">Lighter</span><span class="swatch__hex">#E5FDE9</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#A4FAB3"></div><div class="swatch__meta"><span class="swatch__name">Light</span><span class="swatch__hex">#A4FAB3</span></div></div>
-      <div class="swatch" style="box-shadow: var(--glow-mint);"><div class="swatch__chip" style="background:#7EF893"></div><div class="swatch__meta"><span class="swatch__name">Mint ✦</span><span class="swatch__hex">#7EF893</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#64C675"></div><div class="swatch__meta"><span class="swatch__name">Dark</span><span class="swatch__hex">#64C675</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#32633A"></div><div class="swatch__meta"><span class="swatch__name">Darker</span><span class="swatch__hex">#32633A</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#254A2C"></div><div class="swatch__meta"><span class="swatch__name">Darkest</span><span class="swatch__hex">#254A2C</span></div></div>
+      <div class="swatch" data-hex="#E5FDE9"><div class="swatch__chip" style="background:#E5FDE9"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Lighter</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#E5FDE9</span><span class="swatch__rgb">229, 253, 233</span></div><div class="swatch__cmyk">CMYK 10, 0, 8, 1</div><div class="swatch__usage">Very pale mint tint</div></div></div>
+      <div class="swatch" data-hex="#A4FAB3"><div class="swatch__chip" style="background:#A4FAB3"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Light</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#A4FAB3</span><span class="swatch__rgb">164, 250, 179</span></div><div class="swatch__cmyk">CMYK 34, 0, 28, 2</div><div class="swatch__usage">Hover states, mint-tinted fills</div></div></div>
+      <div class="swatch" data-hex="#7EF893" style="box-shadow: var(--glow-mint);"><div class="swatch__chip" style="background:#7EF893"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Mint ✦</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#7EF893</span><span class="swatch__rgb">126, 248, 147</span></div><div class="swatch__cmyk">CMYK 49, 0, 41, 3</div><div class="swatch__usage">Primary accent, CTAs, active states</div></div></div>
+      <div class="swatch" data-hex="#64C675"><div class="swatch__chip" style="background:#64C675"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Dark</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#64C675</span><span class="swatch__rgb">100, 198, 117</span></div><div class="swatch__cmyk">CMYK 49, 0, 41, 22</div><div class="swatch__usage">Pressed/active mint states</div></div></div>
+      <div class="swatch" data-hex="#32633A"><div class="swatch__chip" style="background:#32633A"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Darker</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#32633A</span><span class="swatch__rgb">50, 99, 58</span></div><div class="swatch__cmyk">CMYK 49, 0, 41, 61</div><div class="swatch__usage">Dark mint backgrounds</div></div></div>
+      <div class="swatch" data-hex="#254A2C"><div class="swatch__chip" style="background:#254A2C"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Darkest</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#254A2C</span><span class="swatch__rgb">37, 74, 44</span></div><div class="swatch__cmyk">CMYK 50, 0, 40, 71</div><div class="swatch__usage">Deep mint, dark overlays</div></div></div>
     </div>
 
     <h3 style="margin-bottom: 24px;">Holographic spectrum — hero only</h3>
     <div class="grid-6" style="margin-bottom: 64px;">
-      <div class="swatch"><div class="swatch__chip" style="background:#69EEFF"></div><div class="swatch__meta"><span class="swatch__name">Holo Cyan</span><span class="swatch__hex">#69EEFF</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#8EF2FF"></div><div class="swatch__meta"><span class="swatch__name">Cyan Lt</span><span class="swatch__hex">#8EF2FF</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#6EFFB6"></div><div class="swatch__meta"><span class="swatch__name">Holo Mint</span><span class="swatch__hex">#6EFFB6</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#BFFFDF"></div><div class="swatch__meta"><span class="swatch__name">Mint Pale</span><span class="swatch__hex">#BFFFDF</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#C6A2FF"></div><div class="swatch__meta"><span class="swatch__name">Lavender</span><span class="swatch__hex">#C6A2FF</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#DEC9FF"></div><div class="swatch__meta"><span class="swatch__name">Lavender Lt</span><span class="swatch__hex">#DEC9FF</span></div></div>
+      <div class="swatch" data-hex="#69EEFF"><div class="swatch__chip" style="background:#69EEFF"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Holo Cyan</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#69EEFF</span><span class="swatch__rgb">105, 238, 255</span></div><div class="swatch__cmyk">CMYK 59, 7, 0, 0</div><div class="swatch__usage">Hero gradient, glow accents</div></div></div>
+      <div class="swatch" data-hex="#8EF2FF"><div class="swatch__chip" style="background:#8EF2FF"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Cyan Lt</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#8EF2FF</span><span class="swatch__rgb">142, 242, 255</span></div><div class="swatch__cmyk">CMYK 44, 5, 0, 0</div><div class="swatch__usage">Lighter cyan tones, overlays</div></div></div>
+      <div class="swatch" data-hex="#6EFFB6"><div class="swatch__chip" style="background:#6EFFB6"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Holo Mint</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#6EFFB6</span><span class="swatch__rgb">110, 255, 182</span></div><div class="swatch__cmyk">CMYK 57, 0, 29, 0</div><div class="swatch__usage">Hero gradient accents</div></div></div>
+      <div class="swatch" data-hex="#BFFFDF"><div class="swatch__chip" style="background:#BFFFDF"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Mint Pale</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#BFFFDF</span><span class="swatch__rgb">191, 255, 223</span></div><div class="swatch__cmyk">CMYK 25, 0, 13, 0</div><div class="swatch__usage">Soft mint glow backgrounds</div></div></div>
+      <div class="swatch" data-hex="#C6A2FF"><div class="swatch__chip" style="background:#C6A2FF"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Lavender</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#C6A2FF</span><span class="swatch__rgb">198, 162, 255</span></div><div class="swatch__cmyk">CMYK 22, 37, 0, 0</div><div class="swatch__usage">Hero gradient accents</div></div></div>
+      <div class="swatch" data-hex="#DEC9FF"><div class="swatch__chip" style="background:#DEC9FF"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Lavender Lt</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#DEC9FF</span><span class="swatch__rgb">222, 201, 255</span></div><div class="swatch__cmyk">CMYK 13, 21, 0, 0</div><div class="swatch__usage">Lighter lavender, hero overlays</div></div></div>
     </div>
 
     <h3 style="margin-bottom: 24px;">Deep anchors — SiteLaunch cards</h3>
     <div class="grid-3" style="margin-bottom: 64px;">
-      <div class="swatch"><div class="swatch__chip" style="background:#001441"></div><div class="swatch__meta"><span class="swatch__name">Deep Navy · Prism</span><span class="swatch__hex">#001441</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#003329"></div><div class="swatch__meta"><span class="swatch__name">Deep Teal · Rocket</span><span class="swatch__hex">#003329</span></div></div>
-      <div class="swatch"><div class="swatch__chip" style="background:#230035"></div><div class="swatch__meta"><span class="swatch__name">Deep Plum · Orbit</span><span class="swatch__hex">#230035</span></div></div>
+      <div class="swatch" data-hex="#001441"><div class="swatch__chip" style="background:#001441"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Deep Navy · Prism</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#001441</span><span class="swatch__rgb">0, 20, 65</span></div><div class="swatch__cmyk">CMYK 100, 69, 0, 75</div><div class="swatch__usage">Prism SiteLaunch card background</div></div></div>
+      <div class="swatch" data-hex="#003329"><div class="swatch__chip" style="background:#003329"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Deep Teal · Rocket</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#003329</span><span class="swatch__rgb">0, 51, 41</span></div><div class="swatch__cmyk">CMYK 100, 0, 20, 80</div><div class="swatch__usage">Rocket SiteLaunch card background</div></div></div>
+      <div class="swatch" data-hex="#230035"><div class="swatch__chip" style="background:#230035"></div><div class="swatch__meta"><div class="swatch__header"><span class="swatch__name">Deep Plum · Orbit</span><button class="swatch__copy" onclick="copySwatchHex(this)">Copy</button></div><div class="swatch__codes"><span class="swatch__hex">#230035</span><span class="swatch__rgb">35, 0, 53</span></div><div class="swatch__cmyk">CMYK 34, 100, 0, 79</div><div class="swatch__usage">Orbit SiteLaunch card background</div></div></div>
     </div>
 
     <!-- Schemes -->
@@ -677,7 +875,11 @@
     <p class="ds-section__intro">A contemporary serif paired with a geometric grotesque. Gelica carries voice, pull-quotes, and display. Manrope carries everything readable — UI, body, captions.</p>
 
     <!-- Specimen -->
-    <div style="padding: 48px; border: 1px solid var(--white-10); border-radius: var(--r-2xl); background: var(--n-ink); margin-bottom: 48px; overflow: hidden;">
+    <div style="padding: 48px; border: 1px solid var(--white-10); border-radius: var(--r-2xl); background: var(--n-ink); margin-bottom: 48px; overflow: hidden; position: relative;">
+      <a href="#" class="logo-dl-all" style="position: absolute; top: 16px; right: 16px; font-size: 11px; padding: 5px 14px; gap: 6px;">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Gelica
+      </a>
       <div class="demo-label" style="color: var(--mint);">Display · Gelica Medium 500 · italic for emphasis</div>
       <div class="specimen-big">Aa<em>Bb</em>Cc</div>
       <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-top:24px; color: var(--text-dim); font-size: 14px; font-family: ui-monospace, monospace;">
@@ -686,7 +888,11 @@
       </div>
     </div>
 
-    <div style="padding: 48px; border: 1px solid var(--white-10); border-radius: var(--r-2xl); background: var(--n-ink); margin-bottom: 64px; overflow: hidden;">
+    <div style="padding: 48px; border: 1px solid var(--white-10); border-radius: var(--r-2xl); background: var(--n-ink); margin-bottom: 64px; overflow: hidden; position: relative;">
+      <a href="fonts/Manrope-VariableFont_wght.ttf" download="Manrope-Variable.ttf" class="logo-dl-all" style="position: absolute; top: 16px; right: 16px; font-size: 11px; padding: 5px 14px; gap: 6px;">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Manrope
+      </a>
       <div class="demo-label" style="color: var(--mint);">Body · Manrope Variable 200–800</div>
       <div style="font-family: var(--font-body); font-size: clamp(60px, 8vw, 140px); line-height: 1; font-weight: 500;">Aa<span style="font-weight: 800;">Bb</span><span style="font-weight: 300;">Cc</span></div>
       <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-top:24px; color: var(--text-dim); font-size: 14px; font-family: ui-monospace, monospace;">
@@ -762,6 +968,7 @@
         <div style="display: grid; grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline;"><span class="gelica-row__label">800 · ExtraBold</span><span style="font-family:var(--font-body);font-weight:800;font-size:32px;">Creative foundations for brands of all sizes.</span></div>
       </div>
     </div>
+
   </div>
 </section>
 
@@ -1300,7 +1507,6 @@
         <div class="holo-bg__veil"></div>
         <div class="holo-bg__fade"></div>
       </div>
-      <img src="assets/logos/wave-black.svg" class="branded-wave" alt="" aria-hidden="true">
       <nav class="navbar" style="position: relative; z-index: 2; background: transparent;">
         <div class="navbar__logo"><img src="assets/logos/wordmark-white.svg" alt="" style="height: 24px;"></div>
         <div class="navbar__nav">
@@ -1375,6 +1581,105 @@
         </div>
       </div>
     </footer>
+  </div>
+</section>
+
+<!-- ══════════ TEMPLATES ══════════ -->
+<section class="ds-section" id="templates">
+  <div class="ds-inner">
+    <div class="ds-section__label">Usage</div>
+    <h2 class="ds-section__title">Templates.</h2>
+    <p class="ds-section__intro">Production-ready brand assets for print and digital. Each template ships as a working source file alongside a preview — download, customise, and export on-brand every time.</p>
+
+    <!-- Print -->
+    <div class="template-sub">
+      <div class="template-sub__label">Print</div>
+
+      <div class="template-row">
+        <div class="template-row__body">
+          <div class="template-row__title">Business Card</div>
+          <div class="template-row__desc">Standard double-sided business card — front features the Founding Creative wordmark with contact info; back carries the holographic wave treatment. Sized 3.5 × 2 in at 300 dpi, bleed included.</div>
+          <div class="template-row__previews">
+            <img class="template-row__img" src="assets/templates/business-cards/business-card-front.png" alt="Business card front preview" loading="lazy">
+            <img class="template-row__img" src="assets/templates/business-cards/business-card-back.png" alt="Business card back preview" loading="lazy">
+          </div>
+        </div>
+        <div class="template-row__actions">
+          <a href="#" class="btn--download">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Template
+          </a>
+          <div class="template-row__meta">PSD + PDF &nbsp;·&nbsp; 4.2 MB</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Digital -->
+    <div class="template-sub">
+      <div class="template-sub__label">Digital</div>
+
+      <div class="template-row">
+        <div class="template-row__body">
+          <div class="template-row__title">Profile Headshots</div>
+          <div class="template-row__desc">Branded team headshots formatted for LinkedIn, email signatures, and internal directories. Consistent dark background with the Founding Creative visual language. 1000 × 1000 px at 72 dpi.</div>
+          <div class="template-row__previews">
+            <img class="template-row__img template-row__img--portrait" src="assets/templates/profile-headshots/Tyler-v4.png" alt="Tyler headshot preview" loading="lazy">
+            <img class="template-row__img template-row__img--portrait" src="assets/templates/profile-headshots/Jamie-v4.png" alt="Jamie headshot preview" loading="lazy">
+            <img class="template-row__img template-row__img--portrait" src="assets/templates/profile-headshots/Titus-v4.png" alt="Titus headshot preview" loading="lazy">
+          </div>
+        </div>
+        <div class="template-row__actions">
+          <a href="#" class="btn--download">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Template
+          </a>
+          <div class="template-row__meta">PSD + PNG &nbsp;·&nbsp; 8.1 MB</div>
+        </div>
+      </div>
+
+      <div class="template-row">
+        <div class="template-row__body">
+          <div class="template-row__title">Email Signature</div>
+          <div class="template-row__desc">Copy-paste HTML for Gmail, Outlook, and Apple Mail. Inline-styled for maximum compatibility — no web fonts needed. Update the placeholder links before deploying.</div>
+          <div class="sig-preview">
+            <p class="sig-preview__name">Tyler Lukey</p>
+            <p class="sig-preview__title">Systems &amp; Product Design</p>
+            <p class="sig-preview__links">
+              <a href="#">Founding Creative</a><span class="sig-preview__sep">|</span><a href="#" style="color:#888;font-weight:400;">LinkedIn</a><span class="sig-preview__sep">|</span><a href="#" style="color:#888;font-weight:400;">Trust Pilot</a><span class="sig-preview__sep">|</span><a href="#" style="color:#888;font-weight:400;">Schedule a meeting</a>
+            </p>
+          </div>
+        </div>
+        <div class="template-row__actions">
+          <a href="#" class="btn--download" id="copy-sig-html-btn" onclick="copyEmailSigHTML(event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy HTML
+          </a>
+          <a href="#" class="btn--download" id="copy-sig-text-btn" onclick="copyEmailSigText(event)" style="background:rgba(255,255,255,0.04);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Copy Plain Text
+          </a>
+          <div class="template-row__meta">HTML + TXT &nbsp;·&nbsp; ~1 KB</div>
+        </div>
+      </div>
+
+      <div class="template-row">
+        <div class="template-row__body">
+          <div class="template-row__title">LinkedIn Banner</div>
+          <div class="template-row__desc">Profile banner sized to LinkedIn's recommended 1584 × 396 px. Features the holographic background treatment with Founding Creative wordmark — consistent with the brand's digital presence across platforms.</div>
+          <div class="template-row__previews">
+            <img class="template-row__img template-row__img--wide" src="assets/templates/linkedin-banner/linkedin-banner.png" alt="LinkedIn banner preview" loading="lazy">
+          </div>
+        </div>
+        <div class="template-row__actions">
+          <a href="#" class="btn--download">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Template
+          </a>
+          <div class="template-row__meta">PSD + PNG &nbsp;·&nbsp; 3.7 MB</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1543,6 +1848,24 @@ box-shadow: var(--glow-mint);
 
     <div style="border: 1px solid rgba(126,248,147,0.2); border-radius: var(--r-xl); background: var(--n-ink); margin-bottom: 16px; overflow: hidden;">
       <div style="display:flex;align-items:center;gap:12px;padding:18px 24px;border-bottom:1px solid var(--white-10);">
+        <span style="font-family:ui-monospace,monospace;font-size:15px;font-weight:700;color:var(--white);">v1.3.0</span>
+        <span style="font-size:10px;font-weight:700;padding:2px 10px;border-radius:var(--r-full);letter-spacing:0.06em;text-transform:uppercase;background:rgba(126,248,147,0.12);color:var(--mint);border:1px solid rgba(126,248,147,0.3);">Minor</span>
+        <span style="font-size:12px;color:var(--text-dim);margin-left:auto;">May 15, 2026</span>
+      </div>
+      <ul style="list-style:none;margin:0;padding:16px 24px;display:flex;flex-direction:column;gap:8px;">
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:14px;color:var(--text-dim);line-height:1.5;"><span style="width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;margin-top:5px;display:inline-block;"></span>Upgraded color swatches — click-to-copy hex, RGB values, CMYK values, and usage descriptions on every swatch</li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:14px;color:var(--text-dim);line-height:1.5;"><span style="width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;margin-top:5px;display:inline-block;"></span>Added Templates section (Usage group) with Print and Digital subsections — business card, team headshots, LinkedIn banner, each with download actions and file info</li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:14px;color:var(--text-dim);line-height:1.5;"><span style="width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;margin-top:5px;display:inline-block;"></span>Added individual SVG download chips for all 8 logo marks plus "Download all marks" CTA in the Logos section</li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:14px;color:var(--text-dim);line-height:1.5;"><span style="width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;margin-top:5px;display:inline-block;"></span>Added Download GIF buttons to each flag texture card</li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:14px;color:var(--text-dim);line-height:1.5;"><span style="width:5px;height:5px;border-radius:50%;background:var(--text-dim);flex-shrink:0;margin-top:5px;display:inline-block;"></span>Removed decorative wave SVG from hero section</li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:14px;color:var(--text-dim);line-height:1.5;"><span style="width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;margin-top:5px;display:inline-block;"></span>Added palette action bar to Colors — copy all hex codes, Download ASE palette, Download CLR (macOS)</li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:14px;color:var(--text-dim);line-height:1.5;"><span style="width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;margin-top:5px;display:inline-block;"></span>Added font download bar to Typography — individual OTF/TTF chips for Gelica Medium, Medium Italic, SemiBold, Bold, Manrope Variable, plus "Download all Gelica weights" CTA</li>
+        <li style="display:flex;align-items:baseline;gap:10px;font-size:14px;color:var(--text-dim);line-height:1.5;"><span style="width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;margin-top:5px;display:inline-block;"></span>Added Email Signature template to Templates → Digital — live HTML preview, Copy HTML button, Copy Plain Text button</li>
+      </ul>
+    </div>
+
+    <div style="border: 1px solid rgba(126,248,147,0.2); border-radius: var(--r-xl); background: var(--n-ink); margin-bottom: 16px; overflow: hidden;">
+      <div style="display:flex;align-items:center;gap:12px;padding:18px 24px;border-bottom:1px solid var(--white-10);">
         <span style="font-family:ui-monospace,monospace;font-size:15px;font-weight:700;color:var(--white);">v1.2.0</span>
         <span style="font-size:10px;font-weight:700;padding:2px 10px;border-radius:var(--r-full);letter-spacing:0.06em;text-transform:uppercase;background:rgba(126,248,147,0.12);color:var(--mint);border:1px solid rgba(126,248,147,0.3);">Minor</span>
         <span style="font-size:12px;color:var(--text-dim);margin-left:auto;">May 6, 2026</span>
@@ -1594,6 +1917,67 @@ box-shadow: var(--glow-mint);
 </div><!-- /.ds-layout -->
 
 <script>
+function copyAllHex() {
+  var swatches = document.querySelectorAll('.swatch[data-hex]');
+  var hexes = Array.prototype.map.call(swatches, function(s) { return s.dataset.hex; });
+  navigator.clipboard.writeText(hexes.join('\n')).then(function() {
+    var btn = document.getElementById('copy-all-hex-btn');
+    btn.textContent = '✓ Copied ' + hexes.length + ' values';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy all hex codes';
+      btn.classList.remove('copied');
+    }, 1800);
+  });
+}
+
+function copyEmailSigHTML(e) {
+  e.preventDefault();
+  var html = '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Helvetica Neue,Arial,sans-serif;">' +
+    '<tr><td style="padding:0;vertical-align:top;">' +
+    '<p style="margin:0 0 2px;font-size:15px;font-weight:700;color:#0a0a0a;letter-spacing:-0.01em;line-height:1.2;">Tyler Lukey</p>' +
+    '<p style="margin:0 0 12px;font-size:12px;color:#666666;font-weight:500;">Systems &amp; Product Design</p>' +
+    '<p style="margin:0;font-size:12px;line-height:1.8;color:#888888;">' +
+    '<a href="https://foundingcreative.com" style="color:#3db355;font-weight:600;text-decoration:none;">Founding Creative</a>' +
+    '<span style="margin:0 5px;color:#cccccc;">|</span>' +
+    '<a href="#" style="color:#888888;text-decoration:none;">LinkedIn</a>' +
+    '<span style="margin:0 5px;color:#cccccc;">|</span>' +
+    '<a href="#" style="color:#888888;text-decoration:none;">Trust Pilot</a>' +
+    '<span style="margin:0 5px;color:#cccccc;">|</span>' +
+    '<a href="#" style="color:#888888;text-decoration:none;">Schedule a meeting</a>' +
+    '</p></td></tr></table>';
+  navigator.clipboard.writeText(html).then(function() {
+    var btn = document.getElementById('copy-sig-html-btn');
+    var orig = btn.innerHTML;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied HTML';
+    setTimeout(function() { btn.innerHTML = orig; }, 1800);
+  });
+}
+
+function copyEmailSigText(e) {
+  e.preventDefault();
+  var text = 'Tyler Lukey\nSystems & Product Design\n\nFounding Creative  |  LinkedIn  |  Trust Pilot  |  Schedule a meeting';
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.getElementById('copy-sig-text-btn');
+    var orig = btn.innerHTML;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied';
+    setTimeout(function() { btn.innerHTML = orig; }, 1800);
+  });
+}
+
+function copySwatchHex(btn) {
+  const hex = btn.closest('.swatch').dataset.hex;
+  navigator.clipboard.writeText(hex).then(function () {
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(function () {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+}
+</script>
+<script>
 (function () {
   const menuBtn = document.getElementById('menu-btn');
   const sidebar = document.getElementById('sidebar');
@@ -1630,7 +2014,7 @@ box-shadow: var(--glow-mint);
   const sectionIds = [
     'brand', 'color', 'type', 'spacing', 'iconography', 'imagery',
     'comp-buttons', 'comp-navbar', 'comp-chips', 'comp-cards', 'comp-sitelaunch',
-    'patterns', 'social', 'ai-implementation', 'changelog'
+    'patterns', 'social', 'ai-implementation', 'templates', 'changelog'
   ];
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
