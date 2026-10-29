@@ -59,5 +59,6 @@ Both HTML files embed additional page-specific styles in a `<style>` block for l
 ## Assets
 
 - **`assets/logos/`** — canonical SVG logo files in four variants (brandmark, icon, wave, wordmark) × two colors (black, white). Use these in production.
+- **`assets/icons/filetype/`** — 14 file type icons, mint glyph on a black tile, 16px SVG plus 16px and 32px PNG, for the Files table in ClickUp task descriptions. Glyphs are Streamline Micro Line. Its README lists the set and how to reference it.
 - **`uploads/`** — raw uploaded source files (fonts, images, slides). Not for direct use; canonical versions are in `assets/` and `fonts/`.
 - **`fonts/`** — all Gelica `.otf` weight files plus Manrope variable `.ttf`. Referenced by `@font-face` in `tokens.css` with relative `../fonts/` paths.
